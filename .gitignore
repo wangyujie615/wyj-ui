@@ -1,0 +1,51 @@
+# 通用忽略规则
+.DS_Store
+*.log
+*.tmp
+*.bak
+*.swp
+*.zip
+
+# 依赖目录（Monorepo 特殊处理）
+node_modules/
+packages/*/node_modules/
+play/*/node_modules/
+
+# 构建产物
+dist/
+packages/*/dist/
+*.d.ts
+*.js.map
+*.css.map
+
+# Vite 相关
+.cache/
+.temp/
+.vite/
+.env.local
+.env.*.local
+
+# TypeScript 编译缓存
+*.tsbuildinfo
+
+# 编辑器配置
+.idea/
+.vscode/
+*.code-workspace
+
+# 测试相关
+coverage/
+.nyc_output/
+
+# 调试文件
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 本地环境变量
+.env
+.env.*
+!.env.example
+
+
