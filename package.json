@@ -3,7 +3,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm -C play dev"
+    "dev": "pnpm -C play dev",
+    "doc:dev":"pnpm -C docs dev"
   },
   "keywords": [],
   "author": "",

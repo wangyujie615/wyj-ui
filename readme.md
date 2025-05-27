@@ -170,3 +170,13 @@ module.exports = {
 ```
 
 编辑器配置
+安装 EditorConfig 插件,创建.editorcinfig 配置文件
+
+## 组件库文档搭建
+
+选择 vitepress 进行组件库文档搭建,可以快速的将 markdown 转化为 html
+在 docs 目录下进行安装
+
+```
+pnpm install vitepress -D
+```
