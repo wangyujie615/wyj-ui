@@ -10,10 +10,13 @@
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
-    "vue": "^3.5.14",
-    "typescript": "^5.8.3",
     "@wyj-ui/components": "workspace:*",
     "@wyj-ui/theme-chalk": "workspace:*",
-    "@wyj-ui/utils": "workspace:*"
+    "@wyj-ui/utils": "workspace:*",
+    "typescript": "^5.8.3",
+    "vue": "^3.5.14"
+  },
+  "devDependencies": {
+    "sass": "^1.89.0"
   }
 }

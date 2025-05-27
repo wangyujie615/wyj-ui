@@ -64,3 +64,63 @@ declare module 'vue'{ // declare module 'vue' 是对 Vue 类型模块的扩展�
 }
 
 ```
+## 组件样式增加
+1. 推荐xicons作为图标库：https://www.xicons.org/#/
+2. scss编写
+- 结构目录
+```
+theme-chalk
+    - src
+        - mixins
+            - config.scss
+```
+- 编写公共配置
+```
+$namespace: 'w';
+$element-separator: '__';
+$modifier-separator: '--';
+$state-prefix: 'is-'; 
+```
+- 编写scss的bem规范，与之前的组件bem规范对应
+```
+@use 'config' as *; //引用config
+@forward 'config';
+
+//bem-规范
+//.z-button
+@mixin b($block) {
+    $B: $namespace+'-' +$block;
+
+    .#{$B} {
+        @content;
+    }
+}
+
+// .z-button.is-xxx
+@mixin when($state) {
+    @at-root {
+        &.#{$state-prefix+$state} {
+            @content;
+        }
+    }
+}
+
+// .z-butoon--primary
+@mixin m($modifier) {
+    @at-root {
+        #{&+$modifier-separator+$modifier} {
+            @content;
+        }
+    }
+}
+
+// z-button__header
+@mixin e($element) {
+    @at-root {
+        #{&+$element-separator+$element} {
+            @content;
+        }
+    }
+}
+```
+## 配置代码校验

@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import Icon from '@wyj-ui/components/icon'
+import '@wyj-ui/theme-chalk/src/index.scss'
 const Plugins = [
     Icon
 ]
