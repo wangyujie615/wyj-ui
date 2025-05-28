@@ -1,5 +1,6 @@
 ---
 layout: home
+
 hero:
   name: wyj-ui
   text: Vue3组件库
@@ -12,6 +13,7 @@ hero:
       text: 快速开始
       link: /guide/quickStart
     - theme: alt
+      link: https://github.com/wangyujie615/wyj-ui
       text: GitHub
 
 features:

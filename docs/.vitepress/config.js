@@ -8,24 +8,38 @@ export default {
   themeConfig: {
     // 主题级选项
     logo: './logo.png',
-    nav:[{ text: 'Guide', link: '/guide' },
-      {
-        text: 'Dropdown Menu',
-        items: [
-          { text: 'Item A', link: '/item-1' },
-          { text: 'Item B', link: '/item-2' },
-          { text: 'Item C', link: '/item-3' }
-        ]
-      }],
-    sidebar:[
-       {
-        text: 'Guide',
-        items: [
-          { text: 'Introduction', link: '/introduction' },
-          { text: 'Getting Started', link: '/getting-started' }
-        ]
-      }
+    nav:[
+      { text: '指南', link: '/guide' },
+      { text: '组件', link: '/components' }
     ],
+    sidebar:{
+      '/guide/':[
+        {
+          text: '指南',
+          items: [
+            { text: 'Introduction', link: '/guide/' },
+            { text: 'Getting Started', link: '/guide/quickStart'}
+          ]
+        }
+      ],
+
+      '/components/':[
+        {
+          text: '组件',
+          items: [
+            { 
+              text: 'Basic基础组件', 
+              items:[
+                {
+                  text: 'Icon组件',
+                  link: '/components/Icon'
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
     carbonAds: {
       code: 'your-carbon-code',
       placement: 'your-carbon-placement'
@@ -34,12 +48,12 @@ export default {
       prev: 'Pagina prior',
       next: 'Proxima pagina'
     },
-     search: {
+    search: {
       provider: 'local'
     },
     footer: {
       message: 'Released under the MIT License.',
-      copyright: 'Copyright © 2019-present Evan You'
+      copyright: 'Copyright © 2019-2025 Evan You'
     }
   },
   vite:{
