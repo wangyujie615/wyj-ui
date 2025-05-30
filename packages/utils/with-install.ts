@@ -1,5 +1,5 @@
 import { Plugin } from 'vue'
-// 给组件田间添加install方法 
+// 给组件添加install方法，使得组件可以通过.use方法进行全局注册 
 // Plugin自带有install方法
 export type SFCWithInstall<T> = T & Plugin
 export function withInstall<T>(component: T) {
