@@ -3,7 +3,7 @@ import { Plugin } from 'vue'
 // Plugin自带有install方法
 export type SFCWithInstall<T> = T & Plugin
 export function withInstall<T>(component: T) {
-    // 1.进行安装
+    // 1.插件要实现install方法
     (component as SFCWithInstall<T>).install = function(app){
         const { name } = component as unknown as { name: string }
          //组件注册为全局组件
