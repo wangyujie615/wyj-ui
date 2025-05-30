@@ -8,6 +8,7 @@ import { AddCircle } from '@vicons/ionicons5'
   </WIcon>
   <!-- 在使用树组件时 会传递一个树形结构 -->
   <WTree></WTree>
+  <WButton type="primary" size="small" native-type="button">按钮</WButton>
 </template>
 
 <style scoped></style>
