@@ -66,19 +66,36 @@ BEM 规范(block-element-modifier-state):用于统一规范组件变量规范
 - app.use(plugin) # 用于注册、安装插件
 - app.component(name,component) # 用于全局注册组件
 
+```typescript
+import { Plugin } from 'vue'
+// 给组件添加install方法，使得组件可以同.use方法进行全局注册
+// Plugin自带有install方法
+export type SFCWithInstall<T> = T & Plugin
+export function withInstall<T>(component: T) {
+  // 1.进行安装
+  ;(component as SFCWithInstall<T>).install = function (app) {
+    const { name } = component as unknown as { name: string }
+    //组件注册为全局组件
+    app.component(name, component)
+  }
+  // 2.返回安装成功的组件
+  return component as SFCWithInstall<T>
+}
+```
+
 ### 追加类型解析和接口合并
 
 为 Vue 的全局组件类型补充声明，使得在模板中使用 <WIcon /> 时能获得类型提示和语法检查支持。
 
-```
-declare module 'vue'{ // declare module 'vue' 是对 Vue 类型模块的扩展声明。
-    export interface GlobalComponents{
-        // GlobalComponents 是 Vue 提供的接口，用于描述全局可用的组件（也就是通过app.component(...) 注册的组件）。
-        //让我们的接口可以自动合并 WIcon: typeof Icon 的作用是让 <WIcon /> 在 .vue 文件模板中有类型提示。
-        WIcon: typeof Icon
-    }
+```typescript
+declare module 'vue' {
+  // declare module 'vue' 是对 Vue 类型模块的扩展声明。
+  export interface GlobalComponents {
+    // GlobalComponents 是 Vue 提供的接口，用于描述全局可用的组件（也就是通过app.component(...) 注册的组件）。
+    //让我们的接口可以自动合并 WIcon: typeof Icon 的作用是让 <WIcon /> 在 .vue 文件模板中有类型提示。
+    WIcon: typeof Icon
+  }
 }
-
 ```
 
 ## 组件样式增加
@@ -93,11 +110,13 @@ theme-chalk
     - src
         - mixins
             - config.scss
+            - mixin.scss
+        - index.scss
 ```
 
 - 编写公共配置
 
-```
+```config.scss
 $namespace: 'w';
 $element-separator: '__';
 $modifier-separator: '--';
@@ -106,8 +125,8 @@ $state-prefix: 'is-';
 
 - 编写 scss 的 bem 规范，与之前的组件 bem 规范对应
 
-```
-@use 'config' as *; //引用config
+```mixin.scss
+@use 'config' as *; //引用config.scss
 @forward 'config';
 
 //bem-规范
@@ -157,7 +176,7 @@ npx eslint --init
 pnpm i eslint-plugin-vue@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest eslint@latest -D -w
 ```
 
-配置 Preitter,代码格式化
+配置 Preitter 进行代码格式化
 
 ```.prettierrc.js
 module.exports = {
@@ -180,3 +199,5 @@ module.exports = {
 ```
 pnpm install vitepress -D
 ```
+
+vitepress 的相关使用参考：https://vitepress.dev/zh/
