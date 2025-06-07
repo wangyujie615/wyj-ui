@@ -16,7 +16,6 @@ docs/.vitepress/cache
 # 构建产物
 dist/
 packages/*/dist/
-*.d.ts
 *.js.map
 *.css.map
 
