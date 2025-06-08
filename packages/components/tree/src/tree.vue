@@ -19,8 +19,6 @@ defineOptions({
   name: "WTree"
 })
 const props = defineProps(treeProps)
-console.log(props);
-
 // 1.有了props要对用户的数据进行格式化，格式化一个固定的结果
 const tree = ref<TreeNode[]>([])
 
@@ -42,7 +40,7 @@ function formatData(data: TreeOption[]): any {
       }
       if (children.length) {
         // 有孩子才去递归
-        treeNode.children = traversal(children, parent)
+        treeNode.children = traversal(children, treeNode)
       }
       return treeNode
     })
