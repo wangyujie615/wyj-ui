@@ -40,7 +40,8 @@ console.log(data.value);
     <AddCircle></AddCircle>
   </WIcon>
   <!-- 在使用树组件时 会传递一个树形结构 -->
-  <WTree :data="data" label-filed="label" key-field="key" children-field="children"></WTree>
+  <WTree :data="data" label-field="label" key-field="key" children-field="children" :default-expanded-keys="['40']">
+  </WTree>
   <WButton type="primary" size="small" native-type="button">按钮</WButton>
 </template>
 

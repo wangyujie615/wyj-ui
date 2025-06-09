@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { TreeNode, TreeOption, treeProps } from './tree';
 // 封装调用的方法
 function createOption(key: string, label: string, children: string) {
@@ -15,6 +15,7 @@ function createOption(key: string, label: string, children: string) {
     }
   }
 }
+// 组件的名称
 defineOptions({
   name: "WTree"
 })
@@ -22,7 +23,7 @@ const props = defineProps(treeProps)
 // 1.有了props要对用户的数据进行格式化，格式化一个固定的结果
 const tree = ref<TreeNode[]>([])
 
-const treeOptions = createOption(props.keyField, props.labelFiled, props.childrenField)
+const treeOptions = createOption(props.keyField, props.labelField, props.childrenField)
 // 2.将props.data格式化
 function formatData(data: TreeOption[]): any {
   function traversal(data: TreeOption[], parent: TreeNode | null = null) {
@@ -58,5 +59,36 @@ watch(
   },
   { immediate: true }
 )
+// 将树拍平，点击还能实现展开操作  
+// 需要展开的key有哪些
+const expandedKeysSet = ref(new Set(props.defaultExpandedKeys))
+
+const flattenTree = computed(() => {
+  let expandedKeys = expandedKeysSet.value; //要展开的keys有哪些
+  const flattenNode: TreeNode[] = []; // 拍平后的结果
+  const nodes = tree.value || []; // 被格式化的节点
+  const stack: TreeNode[] = []; // 用于遍历树的栈
+  // 1.倒序放入
+  for (let i = nodes.length - 1; i >= 0; --i) {
+    stack.push(nodes[i])
+  }
+  while (stack.length) {
+    const node = stack.pop(); // 取出栈顶元素
+    if (!node) continue;
+    flattenNode.push(node);
+    if (expandedKeys.has(node.key)) {
+      // 需要展开，拿到孩子节点
+      const children = node.children;
+      if (children) {
+        for (let i = node.children.length - 1; i >= 0; --i) {
+          stack.push(node.children[i])
+        }
+      }
+    }
+  }
+  return flattenNode
+})
+console.log(flattenTree.value);
+
 </script>
 <template>Tree</template>
