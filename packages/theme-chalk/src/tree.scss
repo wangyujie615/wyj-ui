@@ -1,0 +1,23 @@
+@use 'mixins/mixin.scss' as *;
+
+@include b(tree){
+  display: inline-block;
+  width: 100%;
+}
+@include b(node){
+  padding: 5px 0;
+  font-size: 16px;
+  &:hover{
+    background-color: rgb(195,195,234);
+  }
+
+  @include e('expand-icon'){
+    display: inline-block;
+    vertical-align: middle;
+    transform: rotate(0deg);
+    transition: transform 0.3s ease-in;
+    &.expanded{
+     transform:  rotate(90deg); 
+    }
+  }
+}

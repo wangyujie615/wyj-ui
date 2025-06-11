@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { TreeNode, TreeOption, treeProps } from './tree';
+import { createNameSpace } from '@wyj-ui/utils/create';
+import WTreeNode from './treeNode.vue';
+
+// bem规范
+const bem = createNameSpace('tree')
 // 封装调用的方法
 function createOption(key: string, label: string, children: string) {
   return {
     getKey(node: TreeOption) {
       return node[key] as string // 用户获得的key
     },
-    getLable(node: TreeOption) {
+    getLabel(node: TreeOption) {
       return node[label] as string // 用户传递的label
     },
     getChildren(node: TreeOption) {
@@ -33,11 +38,11 @@ function formatData(data: TreeOption[]): any {
       // 数据转换后的格式 将数据转换为TreeNode格式
       const treeNode: TreeNode = {
         key: treeOptions.getKey(node),
-        label: treeOptions.getLable(node),
+        label: treeOptions.getLabel(node),
         children: [], // 默认为空
         rawNode: node,
         level: parent ? parent.level + 1 : 0, // 根据父亲节点进行计算
-        isLeaf: node.isLeaf ?? children.length == 0 // 判断节点是否自带叶子属性
+        isLeaf: node.isLeaf ?? children.length === 0 // 判断节点是否自带叶子属性
       }
       if (children.length) {
         // 有孩子才去递归
@@ -64,8 +69,8 @@ watch(
 const expandedKeysSet = ref(new Set(props.defaultExpandedKeys))
 
 const flattenTree = computed(() => {
-  let expandedKeys = expandedKeysSet.value; //要展开的keys有哪些
-  const flattenNode: TreeNode[] = []; // 拍平后的结果
+  let expandedKeys = expandedKeysSet.value; // 要展开的keys有哪些
+  const flattenNode: TreeNode[] = []; // 存储拍平后的结果
   const nodes = tree.value || []; // 被格式化的节点
   const stack: TreeNode[] = []; // 用于遍历树的栈
   // 1.倒序放入
@@ -88,7 +93,14 @@ const flattenTree = computed(() => {
   }
   return flattenNode
 })
-console.log(flattenTree.value);
+
+function isExpanded(node: TreeNode): boolean {
+  return expandedKeysSet.value.has(node.key)
+}
 
 </script>
-<template>Tree</template>
+<template>
+  <div :class="bem.b()">
+    <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"></WTreeNode>
+  </div>
+</template>
