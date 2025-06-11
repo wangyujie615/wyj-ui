@@ -97,10 +97,27 @@ const flattenTree = computed(() => {
 function isExpanded(node: TreeNode): boolean {
   return expandedKeysSet.value.has(node.key)
 }
-
+// 折叠
+function collapse(node: TreeNode) {
+  expandedKeysSet.value.delete(node.key)
+}
+// 展开
+function expand(node: TreeNode) {
+  expandedKeysSet.value.add(node.key)
+}
+// 切换展开
+function toggleExpand(node: TreeNode) {
+  const expandKeys = expandedKeysSet.value
+  if (expandKeys.has(node.key)) {
+    collapse(node)
+  } else {
+    expand(node)
+  }
+}
 </script>
 <template>
   <div :class="bem.b()">
-    <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"></WTreeNode>
+    <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"
+      @toggle="toggleExpand"></WTreeNode>
   </div>
 </template>

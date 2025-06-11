@@ -18,8 +18,13 @@
     justify-content: center; // 水平居中（可选，如果图标需要水平居中）
     transform: rotate(0deg);
     transition: transform 0.3s ease-in;
+    cursor: pointer;
     &.expanded{
      transform:  rotate(90deg); 
     }
+    &.is-leaf{
+    fill: transparent;
+    cursor: default;
+  }
   }
 }
