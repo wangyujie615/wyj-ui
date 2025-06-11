@@ -4,7 +4,7 @@ import { treeNodeProps } from './tree';
 import Switcher from './icon/Switcher';
 import WIcon from '@wyj-ui/components/icon';
 const bem = createNameSpace('node')
-const props = defineProps(treeNodeProps)
+const { node, expanded } = defineProps(treeNodeProps)
 </script>
 <template>
   <div :class="bem.b()">
