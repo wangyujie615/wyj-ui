@@ -1,7 +1,9 @@
 @use 'mixins/mixin.scss' as *;
+
 @include b(icon){
-    display: inline-block;
+    display: inline-flex;  // 使用 inline-flex 保持行内特性，同时启用 Flexbox
+    align-items: center;   // 垂直居中（替代 vertical-align: middle）
+    justify-content: center; // 水平居中（可选，如果图标需要水平居中）
     height: 1em;
     width: 1em;
-    vertical-align: middle;
 }

@@ -4,6 +4,7 @@
   display: inline-block;
   width: 100%;
 }
+
 @include b(node){
   padding: 5px 0;
   font-size: 16px;
@@ -12,8 +13,9 @@
   }
 
   @include e('expand-icon'){
-    display: inline-block;
-    vertical-align: middle;
+    display: inline-flex;  // 使用 inline-flex 保持行内特性，同时启用 Flexbox
+    align-items: center;   // 垂直居中（替代 vertical-align: middle）
+    justify-content: center; // 水平居中（可选，如果图标需要水平居中）
     transform: rotate(0deg);
     transition: transform 0.3s ease-in;
     &.expanded{
