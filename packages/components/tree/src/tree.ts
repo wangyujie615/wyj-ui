@@ -1,12 +1,12 @@
 import { ExtractPropTypes, PropType } from "vue"
 type key = string|number
-// data数据的组成 
+// data数据的组成 由于这些数据来自后端
 export interface TreeOption{
   label?:key,
   key?:key,
-  children?: TreeOption[], //子节点元素
+  children?: TreeOption[], // 子节点元素
   isLeaf: boolean,
-  [key:string]: unknown //任意接口
+  [key:string]: unknown // 任意接口
 }
 // 格式化后的结果
 // Required: 强制所有可选属性变为必填
@@ -18,6 +18,7 @@ export interface TreeNode extends Required<TreeOption>{
 
 // tree组件的props props是只读的
 export const treeProps = {
+  // 用户传递的数据--一个TreeOption数组
   data:{
     type: Array as PropType<TreeOption[]>,
     default: () => []
@@ -27,14 +28,17 @@ export const treeProps = {
     type: Array as PropType<key[]>,
     default: () => []
   },
+  // 用户传递的字段 - label
   labelField:{
     type: String,
     default:'label'
   },
+  // 用户传递的字段 - key
   keyField:{
     type: String,
     default:'key'
   },
+  // 用户传递的字段 - children
   childrenField:{
    type: String, 
    default:'children'
@@ -42,12 +46,13 @@ export const treeProps = {
 } as const
 // 控制属性可选
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
+// TreeNode的props
 export const treeNodeProps = {
   node: {
     type: Object as PropType<TreeNode>,
     required: true
   },
-  expanded:{
+  isExpanded:{
     type: Boolean,
     default: false
   }

@@ -4,12 +4,12 @@ import { treeNodeProps } from './tree';
 import Switcher from './icon/Switcher';
 import WIcon from '@wyj-ui/components/icon';
 const bem = createNameSpace('node')
-const { node, expanded } = defineProps(treeNodeProps)
+const { node, isExpanded } = defineProps(treeNodeProps)
 </script>
 <template>
   <div :class="bem.b()">
     <div :class="bem.e('content')">
-      <span :class="[bem.e('expand-icon'), { expanded: expanded && !node.isLeaf }]">
+      <span :class="[bem.e('expand-icon'), { expanded: isExpanded && !node.isLeaf }]">
         <WIcon size="16" color="pink">
           <Switcher></Switcher>
         </WIcon>
