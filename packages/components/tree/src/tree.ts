@@ -1,5 +1,5 @@
 import { ExtractPropTypes, PropType } from "vue"
-type key = string|number
+export type key = string|number
 // data数据的组成 由于这些数据来自后端
 export interface TreeOption{
   label?:key,
@@ -42,7 +42,9 @@ export const treeProps = {
   childrenField:{
    type: String, 
    default:'children'
-  }
+  },
+  // 异步加载
+  onLoad: Function as PropType<(node:TreeOption)=>Promise<TreeOption[]>> 
 } as const
 // 控制属性可选
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
@@ -55,6 +57,10 @@ export const treeNodeProps = {
   isExpanded:{
     type: Boolean,
     default: false
+  },
+  loadingKeys:{
+    type: Object as PropType<Set<key>>,
+    require: true
   }
 } as const 
 export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>

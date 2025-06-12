@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { TreeNode, TreeOption, treeProps } from './tree';
+import { TreeNode, TreeOption, treeProps, key } from './tree';
 import { createNameSpace } from '@wyj-ui/utils/create';
 import WTreeNode from './treeNode.vue';
 
@@ -30,7 +30,7 @@ const tree = ref<TreeNode[]>([])
 
 const treeOptions = createOption(props.keyField, props.labelField, props.childrenField)
 // 2.将props.data格式化
-function formatData(data: TreeOption[]): any {
+function formatData(data: TreeOption[], parent: TreeNode | null = null): any {
   function traversal(data: TreeOption[], parent: TreeNode | null = null) {
     return data.map(node => {
       // 查看孩子节点
@@ -51,7 +51,7 @@ function formatData(data: TreeOption[]): any {
       return treeNode
     })
   }
-  const result: TreeNode[] = traversal(data)
+  const result: TreeNode[] = traversal(data, parent)
   return result
 }
 // 3.监听props.data
@@ -101,14 +101,39 @@ function isExpanded(node: TreeNode): boolean {
 function collapse(node: TreeNode) {
   expandedKeysSet.value.delete(node.key)
 }
+
+const loadingKeyRef = ref(new Set<key>())
+function triggerLoading(node: TreeNode) {
+  // 这个节点需要异步加载
+  if (!node.children.length && !node.isLeaf) {
+    let loadingKeys = loadingKeyRef.value
+    // 如果没有加载过这个节点 就加载这个节点
+    if (!loadingKeys.has(node.key)) {
+      loadingKeys.add(node.key)
+      const onLoad = props.onLoad
+      console.log(onLoad);
+
+      if (onLoad) {
+        onLoad(node.rawNode).then((children) => {
+          // 修改原来的节点
+          node.rawNode.children = children
+          node.children = formatData(children, node)
+          loadingKeys.delete(node.key)
+        })
+      }
+    }
+  }
+}
 // 展开
 function expand(node: TreeNode) {
   expandedKeysSet.value.add(node.key)
+  // 这里实现对应的加载
+  triggerLoading(node)
 }
 // 切换展开
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeysSet.value
-  if (expandKeys.has(node.key)) {
+  if (expandKeys.has(node.key) && !loadingKeys.value.has(node.key)) {
     collapse(node)
   } else {
     expand(node)
@@ -118,6 +143,6 @@ function toggleExpand(node: TreeNode) {
 <template>
   <div :class="bem.b()">
     <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"
-      @toggle="toggleExpand"></WTreeNode>
+      @toggle="toggleExpand" :loading-keys="loadingKeyRef"></WTreeNode>
   </div>
 </template>
