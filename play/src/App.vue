@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
 import { ref } from 'vue'
+import type { TreeOption } from '@wyj-ui/components/tree/src/tree'
 // function createData(level = 4, parentKey = ''): any {
 //   if (!level) return []
 //   const arr = new Array(6 - level).fill(0)
@@ -42,6 +43,7 @@ const handleLoad = (node: TreeOption) => {
         { label: nextLabel(node.label), key: node.key + nextLabel(node.label), isLeaf: false }
       ])
     }, 1000)
+    reject()
   })
 }
 function createLabel(level: number): string {

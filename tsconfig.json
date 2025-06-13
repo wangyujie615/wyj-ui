@@ -10,6 +10,7 @@
     "noLib": false, // 不处理类库
     "target": "ES6", //遵循es6版本
     "sourceMap": true,
+    "verbatimModuleSyntax": true,
     "lib": [
       "ESNext",
       "DOM"
