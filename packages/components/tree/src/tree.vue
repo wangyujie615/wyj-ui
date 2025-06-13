@@ -133,7 +133,7 @@ function expand(node: TreeNode) {
 // 切换展开
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeysSet.value
-  if (expandKeys.has(node.key) && !loadingKeys.value.has(node.key)) {
+  if (expandKeys.has(node.key) && !loadingKeyRef.value.has(node.key)) {
     collapse(node)
   } else {
     expand(node)
