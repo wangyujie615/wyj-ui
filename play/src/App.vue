@@ -37,13 +37,12 @@ function nextLabel(currentLabel?: string | undefined | number): string {
   return ""
 }
 const handleLoad = (node: TreeOption) => {
-  return new Promise<TreeOption[]>((resolve, reject) => {
+  return new Promise<TreeOption[]>((resolve) => {
     setTimeout(() => {
       resolve([
         { label: nextLabel(node.label), key: node.key + nextLabel(node.label), isLeaf: false }
       ])
     }, 1000)
-    reject()
   })
 }
 function createLabel(level: number): string {
