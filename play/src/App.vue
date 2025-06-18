@@ -1,33 +1,33 @@
 <script setup lang="ts">
 import { AddCircle } from '@vicons/ionicons5'
 import { ref } from 'vue'
-import type { TreeOption } from '@wyj-ui/components/tree/src/tree'
-// function createData(level = 4, parentKey = ''): any {
-//   if (!level) return []
-//   const arr = new Array(6 - level).fill(0)
-//   return arr.map((_, idx: number) => {
-//     const key = parentKey + level + idx
-//     return {
-//       key, //为了唯一性 
-//       label: createLabel(level), //层级
-//       children: createData(level - 1, key) //子节点
-//     }
-//   })
-// }
-function createData() {
-  return [
-    {
-      label: nextLabel(),
-      key: 1,
-      isLeaf: false
-    },
-    {
-      label: nextLabel(),
-      key: 2,
-      isLeaf: false
+import type { key, TreeOption } from '@wyj-ui/components/tree/src/tree'
+function createData(level = 4, parentKey = ''): any {
+  if (!level) return []
+  const arr = new Array(6 - level).fill(0)
+  return arr.map((_, idx: number) => {
+    const key = parentKey + level + idx
+    return {
+      key, //为了唯一性 
+      label: createLabel(level), //层级
+      children: createData(level - 1, key) //子节点
     }
-  ]
+  })
 }
+// function createData() {
+//   return [
+//     {
+//       label: nextLabel(),
+//       key: 1,
+//       isLeaf: false
+//     },
+//     {
+//       label: nextLabel(),
+//       key: 2,
+//       isLeaf: false
+//     }
+//   ]
+// }
 function nextLabel(currentLabel?: string | undefined | number): string {
   if (!currentLabel) return "hello,world"
   if (currentLabel === 'hello,world') return "你好,世界"
@@ -61,9 +61,12 @@ function createLabel(level: number): string {
   return ''
 }
 const data = ref<TreeOption[]>(createData())
+const value = ref<key[]>(['40', '41'])
+function handleSelect(keys: key[]) {
+  console.log(keys);
 
-console.log("data");
-console.log(data.value);
+  value.value = keys
+}
 </script>
 
 <template>
@@ -71,7 +74,8 @@ console.log(data.value);
     <AddCircle></AddCircle>
   </WIcon>
   <!-- 在使用树组件时 会传递一个树形结构 -->
-  <WTree :data="data" label-field="label" key-field="key" children-field="children" :on-load="handleLoad">
+  <WTree :data="data" label-field="label" key-field="key" children-field="children" :mutiple="true" :select-keys="value"
+    @update:select-keys="handleSelect">
   </WTree>
   <WButton type="primary" size="small" native-type="button">按钮</WButton>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { TreeNode, TreeOption, treeProps, key } from './tree';
+import { TreeNode, TreeOption, treeProps, key, treeEmits } from './tree';
 import { createNameSpace } from '@wyj-ui/utils/create';
 import WTreeNode from './treeNode.vue';
 
@@ -12,6 +12,8 @@ defineOptions({
 const bem = createNameSpace('tree')
 // 组件的 props
 const props = defineProps(treeProps)
+// 树组件的事件
+const emit = defineEmits(treeEmits)
 // 1.对用户传入的数据进行格式化，格式化一个固定的结果
 const tree = ref<TreeNode[]>([])
 // 封装获取的属性的方法
@@ -23,6 +25,9 @@ const expandedKeysSet = ref(new Set(props.defaultExpandedKeys))
 
 // 记录异步加载的节点
 const loadingKeyRef = ref(new Set<key>())
+
+// 记录选中的节点
+const selectKeysRef = ref<key[]>([])
 // 2.监听props.data，将传入的props格式化
 watch(
   () => props.data,
@@ -30,6 +35,17 @@ watch(
     // 4.将格式化后的数据放入到tree
     tree.value = formatData(data)
     console.log(tree.value);
+  },
+  { immediate: true }
+)
+
+// 监听props.selectKeys，更新选中的节点
+watch(
+  () => props.selectKeys,
+  (value) => {
+    if (value) {
+      selectKeysRef.value = value
+    }
   },
   { immediate: true }
 )
@@ -175,10 +191,40 @@ function toggleExpand(node: TreeNode) {
     expand(node)
   }
 }
+
+/**
+ * 处理选中的节点
+ * @param node 
+ */
+function handleSelect(node: TreeNode) {
+  let keys = Array.from(selectKeysRef.value)
+  // 无法选择
+  if (!props.selectAble) return
+  if (props.mutiple) {
+    let index = keys.findIndex(key => key === node.key)
+    if (index > -1) {
+      // 当前节点被选中 则取消选中
+      keys.splice(index, 1)
+    } else {
+      // 当前节点未选中 则选中
+      keys.push(node.key)
+    }
+  } else {
+    if (keys.includes(node.key)) {
+      // 之前选中 变成未被选中
+      keys = []
+    } else {
+      // 反之选中
+      keys = [node.key]
+    }
+  }
+  emit('update:selectKeys', keys)
+}
 </script>
 <template>
   <div :class="bem.b()">
     <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"
-      @toggle="toggleExpand" :loading-keys="loadingKeyRef"></WTreeNode>
+      :loading-keys="loadingKeyRef" :select-keys="selectKeysRef" @select="handleSelect" @toggle="toggleExpand">
+    </WTreeNode>
   </div>
 </template>

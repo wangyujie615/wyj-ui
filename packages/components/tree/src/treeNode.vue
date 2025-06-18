@@ -10,20 +10,31 @@ defineOptions({ name: 'WTreeNode' })
 // bem规范
 const bem = createNameSpace('node')
 // props
-const { node, isExpanded, loadingKeys } = defineProps(treeNodeProps)
+const { node, isExpanded, loadingKeys, selectKeys } = defineProps(treeNodeProps)
 // emits
 const emit = defineEmits(treeNodeEmits)
 // 计算属性 判断节点的加载状态
 const isLoading = computed(() => {
   return loadingKeys.has(node.key)
 })
+
+// 判断节点是否选中
+const isSelected = computed(() => {
+  return selectKeys.includes(node.key)
+})
 // 点击展开
 function handleExpand() {
   emit('toggle', node)
 }
+
+// 点击选中
+function handleSelected() {
+  emit('select', node)
+}
+
 </script>
 <template>
-  <div :class="bem.b()" :style="{ paddingLeft: `${node.level * 16}px` }">
+  <div :class="[bem.b(), bem.is('selected', isSelected)]" :style="{ paddingLeft: `${node.level * 16}px` }">
     <div :class="bem.e('content')">
       <span :class="[
         bem.e('expand-icon'),
@@ -37,7 +48,7 @@ function handleExpand() {
           <Loading v-else size="48" color="#3b82f6" thickness="8"></Loading>
         </WIcon>
       </span>
-      <span>{{ node?.label }}</span>
+      <span @click="handleSelected" :class="bem.e('label')">{{ node?.label }}</span>
     </div>
   </div>
 </template>

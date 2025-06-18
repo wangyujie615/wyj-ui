@@ -25,6 +25,18 @@
     &.is-leaf{
     fill: transparent;
     cursor: default;
+    }
   }
+
+  @include when(selected){
+    background-color: rgb(227, 143, 17);
+  }
+  @include e('content'){
+    display: flex;
+  }
+  @include e('label'){
+    cursor: pointer;
+    display: flex;
+    flex: 1;
   }
 }

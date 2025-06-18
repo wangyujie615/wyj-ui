@@ -44,10 +44,29 @@ export const treeProps = {
     default: () => []
   },
   // 异步加载数据
-  onLoad: Function as PropType<(node:TreeOption)=>Promise<TreeOption[]>> 
+  onLoad: Function as PropType<(node:TreeOption)=>Promise<TreeOption[]>>,
+  // 选中的结果
+  selectKeys:{
+    type: Array as PropType<key[]>,
+  },
+  // 是否支持可选节点
+  selectAble:{
+    type: Boolean,
+    default: true
+  },
+  // 是否支持多选节点
+  mutiple:{
+    type: Boolean,
+    default: false
+  }
 } as const
 // 控制属性可选
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
+// 树内部发射的事件用来同步响应数据
+export const treeEmits={
+  'update:selectKeys':(keys:key[])=>keys
+}
+
 // TreeNode的props
 export const treeNodeProps = {
   // 节点数据
@@ -64,9 +83,15 @@ export const treeNodeProps = {
   loadingKeys:{
     type: Object as PropType<Set<key>>,
     required: true
+  },
+  // 选中的节点数据
+  selectKeys:{
+    type: Array as PropType<key[]>,
+    default: () => []
   }
 } as const 
 export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>
 export const treeNodeEmits={
-  toggle:(node:TreeNode)=>node
+  toggle:(node:TreeNode)=>node,
+  select:(node:TreeNode)=>node,
 }
