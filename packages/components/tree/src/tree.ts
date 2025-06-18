@@ -23,11 +23,6 @@ export const treeProps = {
     type: Array as PropType<TreeOption[]>,
     default: () => []
   },
-  // 控制默认展开字段
-  defaultExpandedKeys:{
-    type: Array as PropType<key[]>,
-    default: () => []
-  },
   // 用户传递的字段 - label
   labelField:{
     type: String,
@@ -43,24 +38,32 @@ export const treeProps = {
    type: String, 
    default:'children'
   },
-  // 异步加载
+   // 控制默认展开字段 - key[]
+  defaultExpandedKeys:{
+    type: Array as PropType<key[]>,
+    default: () => []
+  },
+  // 异步加载数据
   onLoad: Function as PropType<(node:TreeOption)=>Promise<TreeOption[]>> 
 } as const
 // 控制属性可选
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
 // TreeNode的props
 export const treeNodeProps = {
+  // 节点数据
   node: {
     type: Object as PropType<TreeNode>,
     required: true
   },
+  // 节点是否被展开
   isExpanded:{
     type: Boolean,
     default: false
   },
+  // 异步加载的节点
   loadingKeys:{
     type: Object as PropType<Set<key>>,
-    require: true
+    required: true
   }
 } as const 
 export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>
