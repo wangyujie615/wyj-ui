@@ -218,3 +218,4 @@ vitepress 的相关使用参考：https://vitepress.dev/zh/
 3. 树形节点实现默认选中高亮, 点击选中; 并支持多级选中
 4. 树形节点实现异步加载功能
 5. 实现禁用节点
+6. 树自定义节点: (利用 provide inject slot tsx 实现)
