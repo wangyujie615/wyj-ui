@@ -60,7 +60,32 @@ function createLabel(level: number): string {
   }
   return ''
 }
-const data = ref<TreeOption[]>(createData())
+// const data = ref<TreeOption[]>(createData())
+const data = ref<TreeOption[]>([
+  {
+    label: '一',
+    key: '1',
+    children: [
+      {
+        label: '一-1',
+        key: '11',
+        children: [
+          {
+            label: '一-1-1',
+            key: '111',
+            disabled: true,
+            children: [
+              {
+                label: '一-1-1-1',
+                key: '1111',
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+])
 const value = ref<key[]>(['40', '41'])
 function handleSelect(keys: key[]) {
   console.log(keys);

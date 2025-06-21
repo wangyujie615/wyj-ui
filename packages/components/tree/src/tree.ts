@@ -6,6 +6,7 @@ export interface TreeOption{
   key?:key,
   children?: TreeOption[], // 子节点元素
   isLeaf: boolean,
+  disabled?: boolean, // 禁用
   [key:string]: unknown // 任意接口
 }
 // 格式化后的结果

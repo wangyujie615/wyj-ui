@@ -95,6 +95,7 @@ function formatData(data: TreeOption[], parent: TreeNode | null = null): any {
         label: treeOptions.getLabel(node),
         children: [], // 默认为空
         rawNode: node, // 原始数据
+        disabled: node.disabled ?? false, // 禁用
         level: parent ? parent.level + 1 : 0, // 根据父亲节点进行计算
         isLeaf: node.isLeaf ?? children.length === 0 // 判断节点是否自带叶子属性
       }

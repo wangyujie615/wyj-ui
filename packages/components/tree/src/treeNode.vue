@@ -29,12 +29,14 @@ function handleExpand() {
 
 // 点击选中
 function handleSelected() {
+  if (node.disabled) return
   emit('select', node)
 }
 
 </script>
 <template>
-  <div :class="[bem.b(), bem.is('selected', isSelected)]" :style="{ paddingLeft: `${node.level * 16}px` }">
+  <div :class="[bem.b(), bem.is('selected', isSelected), bem.is('disabled', node.disabled)]"
+    :style="{ paddingLeft: `${node.level * 16}px` }">
     <div :class="bem.e('content')">
       <span :class="[
         bem.e('expand-icon'),
