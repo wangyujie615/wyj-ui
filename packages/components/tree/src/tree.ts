@@ -1,4 +1,4 @@
-import { ExtractPropTypes, PropType } from "vue"
+import { ExtractPropTypes, InjectionKey, PropType, SetupContext } from "vue"
 export type key = string|number
 // data数据的组成 由于这些数据来自后端
 export interface TreeOption{
@@ -16,6 +16,15 @@ export interface TreeNode extends Required<TreeOption>{
   rawNode: TreeOption,
   children: TreeNode[] // 覆盖了原始属性
 }
+
+
+export interface TreeContext{
+  slots: SetupContext['slots'],
+  emit: SetupContext<typeof treeEmits>['emit'],
+}
+
+// 作为提供出去的变量
+export const treeInjectKey: InjectionKey<TreeContext> = Symbol()
 
 // tree组件的props props是只读的
 export const treeProps = {
@@ -95,4 +104,11 @@ export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>
 export const treeNodeEmits={
   toggle:(node:TreeNode)=>node,
   select:(node:TreeNode)=>node,
+}
+
+export const treeNodeContentProps = {
+  node:{
+    type: Object as PropType<TreeNode>,
+    required: true
+  }
 }

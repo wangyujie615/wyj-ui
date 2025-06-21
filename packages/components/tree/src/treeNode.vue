@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { createNameSpace } from '@wyj-ui/utils/create';
-import { treeNodeEmits, treeNodeProps } from './tree';
+import { treeNodeEmits, treeNodeProps, treeInjectKey } from './tree';
 import Switcher from './icon/Switcher';
 import WIcon from '@wyj-ui/components/icon';
 import Loading from "./icon/Loading"
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
+import WTreeNodeContent from './tree-node-content';
 // 组件的名称
 defineOptions({ name: 'WTreeNode' })
 // bem规范
@@ -13,6 +14,10 @@ const bem = createNameSpace('node')
 const { node, isExpanded, loadingKeys, selectKeys } = defineProps(treeNodeProps)
 // emits
 const emit = defineEmits(treeNodeEmits)
+
+// 注入插槽
+const treeContext = inject(treeInjectKey)
+
 // 计算属性 判断节点的加载状态
 const isLoading = computed(() => {
   return loadingKeys.has(node.key)
@@ -33,11 +38,13 @@ function handleSelected() {
   emit('select', node)
 }
 
+console.log('Rendering node:', node)
 </script>
 <template>
   <div :class="[bem.b(), bem.is('selected', isSelected), bem.is('disabled', node.disabled)]"
     :style="{ paddingLeft: `${node.level * 16}px` }">
     <div :class="bem.e('content')">
+      <!-- 图标区域 -->
       <span :class="[
         bem.e('expand-icon'),
         { expanded: isExpanded && !node.isLeaf },
@@ -50,7 +57,10 @@ function handleSelected() {
           <Loading v-else size="48" color="#3b82f6" thickness="8"></Loading>
         </WIcon>
       </span>
-      <span @click="handleSelected" :class="bem.e('label')">{{ node?.label }}</span>
+      <!-- 节点内容 -->
+      <span @click="handleSelected" :class="bem.e('label')">
+        <WTreeNodeContent :node="node"></WTreeNodeContent>
+      </span>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue';
-import { TreeNode, TreeOption, treeProps, key, treeEmits } from './tree';
+import { computed, ref, watch, provide, useSlots } from 'vue';
+import { TreeNode, TreeOption, treeProps, key, treeEmits, treeInjectKey } from './tree';
 import { createNameSpace } from '@wyj-ui/utils/create';
 import WTreeNode from './treeNode.vue';
 
@@ -28,6 +28,13 @@ const loadingKeyRef = ref(new Set<key>())
 
 // 记录选中的节点
 const selectKeysRef = ref<key[]>([])
+
+// 接受Tree传入的插槽
+provide(treeInjectKey, {
+  slots: useSlots(),
+})
+
+
 // 2.监听props.data，将传入的props格式化
 watch(
   () => props.data,
