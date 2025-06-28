@@ -3,7 +3,7 @@ import { computed, ref, watch, provide, useSlots } from 'vue';
 import { TreeNode, TreeOption, treeProps, key, treeEmits, treeInjectKey } from './tree';
 import { createNameSpace } from '@wyj-ui/utils/create';
 import WTreeNode from './treeNode.vue';
-
+import WVirtualList from '@wyj-ui/components/virtual-list';
 // 组件的名称
 defineOptions({
   name: "WTree"
@@ -31,7 +31,7 @@ const selectKeysRef = ref<key[]>([])
 
 // 接受Tree传入的插槽
 provide(treeInjectKey, {
-  slots: useSlots(),
+  slots: useSlots()
 })
 
 
@@ -173,7 +173,7 @@ function triggerLoading(node: TreeNode) {
     // 如果没有加载过这个节点 就加载这个节点
     if (!loadingKeys.has(node.key)) {
       loadingKeys.add(node.key)
-      const onLoad = props.onLoad // 异步加载函数
+      const onLoad = props.onLoad // 调用传入的异步加载函数进行异步加载
       if (onLoad) {
         onLoad(node.rawNode).then((children) => {
           // 修改原来的节点
@@ -231,8 +231,13 @@ function handleSelect(node: TreeNode) {
 </script>
 <template>
   <div :class="bem.b()">
-    <WTreeNode v-for="node in flattenTree" :key="node.key" :node="node" :is-expanded="isExpanded(node)"
-      :loading-keys="loadingKeyRef" :select-keys="selectKeysRef" @select="handleSelect" @toggle="toggleExpand">
-    </WTreeNode>
+    <!-- 实现虚拟树列表 -->
+    <WVirtualList :items="flattenTree" :remain="8" :size="33">
+      <template #default="{ node }">
+        <WTreeNode :key="node.key" :node="node" :is-expanded="isExpanded(node)" :loading-keys="loadingKeyRef"
+          :select-keys="selectKeysRef" @select="handleSelect" @toggle="toggleExpand">
+        </WTreeNode>
+      </template>
+    </WVirtualList>
   </div>
 </template>

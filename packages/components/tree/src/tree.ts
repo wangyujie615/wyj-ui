@@ -20,7 +20,6 @@ export interface TreeNode extends Required<TreeOption>{
 
 export interface TreeContext{
   slots: SetupContext['slots'],
-  emit: SetupContext<typeof treeEmits>['emit'],
 }
 
 // 作为提供出去的变量
