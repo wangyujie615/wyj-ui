@@ -1,4 +1,7 @@
 import { h, defineComponent } from 'vue'
+/**
+ * Loading 动画
+ */
 export default defineComponent({
   name: 'Loading',
   render() {

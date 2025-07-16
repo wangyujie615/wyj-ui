@@ -92,6 +92,8 @@ function handleSelect(keys: key[]) {
 
   value.value = keys
 }
+
+const check = ref(true)
 </script>
 
 <template>
@@ -105,7 +107,11 @@ function handleSelect(keys: key[]) {
       {{ node.key }}-{{ node.label }}
     </template>
   </WTree>
-  <WButton type="primary" size="small" native-type="button">按钮</WButton>
+  <!-- <WButton type="primary" size="small" native-type="button">按钮</WButton> -->
+  {{ check }}
+  <WCheckbox v-model="check" label="节点">
+    节点
+  </WCheckbox>
 </template>
 
 <style scoped></style>

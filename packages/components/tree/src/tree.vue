@@ -10,9 +10,9 @@ defineOptions({
 })
 // bem规范
 const bem = createNameSpace('tree')
-// 组件的 props
+// 定义组件的props
 const props = defineProps(treeProps)
-// 树组件的事件
+// 定义树组件的事件
 const emit = defineEmits(treeEmits)
 // 1.对用户传入的数据进行格式化，格式化一个固定的结果
 const tree = ref<TreeNode[]>([])
@@ -29,7 +29,7 @@ const loadingKeyRef = ref(new Set<key>())
 // 记录选中的节点
 const selectKeysRef = ref<key[]>([])
 
-// 接受Tree传入的插槽
+// 外层传入的插槽 接受Tree传入的插槽
 provide(treeInjectKey, {
   slots: useSlots()
 })
@@ -60,7 +60,7 @@ watch(
 // 例子：[{id:1,label:'level1',children:[{id:11,label:'leve;2'}]},{id:2,label:'level1',children:[]}]
 // 展开节点一：相当于转化为[1,11,2]=>为了懒加载的实现
 const flattenTree = computed(() => {
-  let expandedKeys = expandedKeysSet.value; // 要展开的keys有哪些
+  let expandedKeys = expandedKeysSet.value; // 要展开的keys有哪些 计算属性依赖的属性 需要时才计算 并且会缓存
   const flattenNode: TreeNode[] = []; // 存储拍平后的结果
   const nodes = tree.value || []; // 被格式化的节点
   const stack: TreeNode[] = []; // 用于遍历树的栈

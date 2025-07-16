@@ -6,12 +6,12 @@ export default defineComponent({
   props: treeNodeContentProps,
   setup(props) {
     // 注入插槽内容
-    const treeContext = inject(treeInjectKey)
-    const node = computed(() => props.node)
+    const treeContext = inject(treeInjectKey) // 注入的插槽内容
+    const node = computed(() => props.node) // 节点数据
     return () => {
       return treeContext?.slots.default
         ? treeContext?.slots.default!({ node: node.value }) // 插槽内容存在即返回对应内容
-        : node.value?.label // 否则返回label
+        : node.value?.label // 否则返回节点的label
     }
   },
 })

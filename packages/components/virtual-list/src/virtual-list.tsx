@@ -4,6 +4,7 @@ import { defineComponent, ref, onMounted, reactive, computed, watch } from 'vue'
 export default defineComponent({
   name: 'WVirtualList',
   props: {
+    // 虚拟在高度
     size: {
       type: Number,
       default: 35,
@@ -13,6 +14,7 @@ export default defineComponent({
       type: Number,
       default: 8,
     },
+    // 虚拟列表的数据
     items: {
       type: Array,
       default: () => [],

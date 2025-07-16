@@ -38,7 +38,6 @@ function handleSelected() {
   emit('select', node)
 }
 
-console.log('Rendering node:', node)
 </script>
 <template>
   <div :class="[bem.b(), bem.is('selected', isSelected), bem.is('disabled', node.disabled)]"
