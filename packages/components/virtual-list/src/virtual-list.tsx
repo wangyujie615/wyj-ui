@@ -4,12 +4,12 @@ import { defineComponent, ref, onMounted, reactive, computed, watch } from 'vue'
 export default defineComponent({
   name: 'WVirtualList',
   props: {
-    // 虚拟在高度
+    // 每一个列表元素的高度
     size: {
       type: Number,
       default: 35,
     },
-    // 真实可见的节点个数
+    // 列表真实可见的节点个数
     remain: {
       type: Number,
       default: 8,
@@ -22,21 +22,22 @@ export default defineComponent({
   },
   setup(props, { slots }) {
     const bem = createNameSpace('vl')
+    // 虚拟列表的外边框
     const wrapperRef = ref<HTMLElement>()
     // 滑动条
     const barRef = ref<HTMLElement>()
     // 虚拟列表的开始的长度
     const state = reactive({
       start: 0,
-      end: props.remain,
+      end: props.remain
     })
     // 滚动的长度
     const offset = ref(0)
-    // 向前填充的内容
+    // 向前填充的内容的数量
     const pre = computed(() => {
       return Math.min(state.start, props.remain)
     })
-    // 向后填充的内容
+    // 向后填充的内容的数量
     const next = computed(() => {
       return Math.min(props.items.length - state.end, props.remain)
     })
@@ -46,12 +47,14 @@ export default defineComponent({
       return props.items.slice(state.start - pre.value, state.end + next.value)
     })
 
+    // 监听传入的数据
     watch(() => props.items, initWrapper)
 
+    // 第一次装载组件时，也实现初始化函数
     onMounted(() => {
       initWrapper()
     })
-    // 初始化Wrapper
+    // 初始化Wrapper 计算列表的长度和滚动条的长度
     function initWrapper() {
       wrapperRef.value!.style.height = props.remain * props.size + 'px' // 列表的长度
       barRef.value!.style.height = props.items.length * props.size + 'px' // 滚动条的长度
