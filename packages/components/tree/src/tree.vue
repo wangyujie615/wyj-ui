@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { computed, ref, watch, provide, useSlots } from 'vue';
-import { TreeNode, TreeOption, treeProps, key, treeEmits, treeInjectKey } from './tree';
-import { createNameSpace } from '@wyj-ui/utils/create';
-import WTreeNode from './treeNode.vue';
-import WVirtualList from '@wyj-ui/components/virtual-list';
+import { computed, ref, watch, provide, useSlots } from 'vue'
+import {
+  TreeNode,
+  TreeOption,
+  treeProps,
+  key,
+  treeEmits,
+  treeInjectKey,
+} from './tree'
+import { createNameSpace } from '@wyj-ui/utils/create'
+import WTreeNode from './treeNode.vue'
+import WVirtualList from '@wyj-ui/components/virtual-list'
 // 组件的名称
 defineOptions({
-  name: "WTree"
+  name: 'WTree',
 })
 // bem规范
 const bem = createNameSpace('tree')
@@ -17,23 +24,27 @@ const emit = defineEmits(treeEmits)
 // 1.对用户传入的数据进行格式化，格式化一个固定的结果
 const tree = ref<TreeNode[]>([])
 // 封装获取的属性的方法
-const treeOptions = createOption(props.keyField, props.labelField, props.childrenField)
+const treeOptions = createOption(
+  props.keyField,
+  props.labelField,
+  props.childrenField
+)
 
-// 将树的节点进行展开，点击还能实现展开操作  
+// 将树的节点进行展开，点击还能实现展开操作
 // 需要展开的key有哪些
 const expandedKeysSet = ref(new Set(props.defaultExpandedKeys))
 
-// 记录异步加载的节点
+// -------------- 中间数据 ----------------
+// 记录异步加载过的节点
 const loadingKeyRef = ref(new Set<key>())
 
-// 记录选中的节点
+// 记录组件选中的节点
 const selectKeysRef = ref<key[]>([])
 
 // 外层传入的插槽 接受Tree传入的插槽
 provide(treeInjectKey, {
-  slots: useSlots()
+  slots: useSlots(),
 })
-
 
 // 2.监听props.data，将传入的props格式化
 watch(
@@ -41,7 +52,7 @@ watch(
   (data: TreeOption[]) => {
     // 4.将格式化后的数据放入到tree
     tree.value = formatData(data)
-    console.log(tree.value);
+    console.log(tree.value)
   },
   { immediate: true }
 )
@@ -49,7 +60,7 @@ watch(
 // 监听props.selectKeys，更新选中的节点
 watch(
   () => props.selectKeys,
-  (value) => {
+  value => {
     if (value) {
       selectKeysRef.value = value
     }
@@ -60,21 +71,21 @@ watch(
 // 例子：[{id:1,label:'level1',children:[{id:11,label:'leve;2'}]},{id:2,label:'level1',children:[]}]
 // 展开节点一：相当于转化为[1,11,2]=>为了懒加载的实现
 const flattenTree = computed(() => {
-  let expandedKeys = expandedKeysSet.value; // 要展开的keys有哪些 计算属性依赖的属性 需要时才计算 并且会缓存
-  const flattenNode: TreeNode[] = []; // 存储拍平后的结果
-  const nodes = tree.value || []; // 被格式化的节点
-  const stack: TreeNode[] = []; // 用于遍历树的栈
+  let expandedKeys = expandedKeysSet.value // 要展开的keys有哪些 计算属性依赖的属性 需要时才计算 并且会缓存
+  const flattenNode: TreeNode[] = [] // 存储拍平后的结果
+  const nodes = tree.value || [] // 被格式化的节点
+  const stack: TreeNode[] = [] // 用于遍历树的栈
   // 1.倒序放入
   for (let i = nodes.length - 1; i >= 0; --i) {
     stack.push(nodes[i])
   }
   while (stack.length) {
-    const node = stack.pop(); // 取出栈顶元素
-    if (!node) continue;
-    flattenNode.push(node);
+    const node = stack.pop() // 取出栈顶元素
+    if (!node) continue
+    flattenNode.push(node)
     if (expandedKeys.has(node.key)) {
       // 需要展开，拿到孩子节点
-      const children = node.children;
+      const children = node.children
       if (children) {
         for (let i = node.children.length - 1; i >= 0; --i) {
           stack.push(node.children[i])
@@ -104,7 +115,7 @@ function formatData(data: TreeOption[], parent: TreeNode | null = null): any {
         rawNode: node, // 原始数据
         disabled: node.disabled ?? false, // 禁用
         level: parent ? parent.level + 1 : 0, // 根据父亲节点进行计算
-        isLeaf: node.isLeaf ?? children.length === 0 // 判断节点是否自带叶子属性
+        isLeaf: node.isLeaf ?? children.length === 0, // 判断节点是否自带叶子属性
       }
       if (children.length) {
         // 有孩子才去递归
@@ -133,13 +144,13 @@ function createOption(key: string, label: string, children: string) {
     },
     getChildren(node: TreeOption) {
       return node[children] as TreeOption[] // 用户传递的children
-    }
+    },
   }
 }
 
 /**
  * 是否展开节点
- * @param node 
+ * @param node
  */
 function isExpanded(node: TreeNode): boolean {
   return expandedKeysSet.value.has(node.key)
@@ -147,7 +158,7 @@ function isExpanded(node: TreeNode): boolean {
 
 /**
  * 折叠节点
- * @param node 
+ * @param node
  */
 function collapse(node: TreeNode) {
   expandedKeysSet.value.delete(node.key)
@@ -155,7 +166,7 @@ function collapse(node: TreeNode) {
 
 /**
  * 展开节点
- * @param node 
+ * @param node
  */
 function expand(node: TreeNode) {
   expandedKeysSet.value.add(node.key)
@@ -165,17 +176,17 @@ function expand(node: TreeNode) {
 
 /**
  * 异步加载节点 需要时，去请求节点数据
- * @param node 
+ * @param node
  */
 function triggerLoading(node: TreeNode) {
   if (!node.children.length && !node.isLeaf) {
     let loadingKeys = loadingKeyRef.value
-    // 如果没有加载过这个节点 就加载这个节点
+    // 如果没有加载过这个节点 就调用异步函数加载这个节点
     if (!loadingKeys.has(node.key)) {
       loadingKeys.add(node.key)
       const onLoad = props.onLoad // 调用传入的异步加载函数进行异步加载
       if (onLoad) {
-        onLoad(node.rawNode).then((children) => {
+        onLoad(node.rawNode).then(children => {
           // 修改原来的节点
           node.rawNode.children = children
           node.children = formatData(children, node)
@@ -187,7 +198,7 @@ function triggerLoading(node: TreeNode) {
 }
 /**
  * 子节点点击展开
- * @param node 
+ * @param node
  */
 function toggleExpand(node: TreeNode) {
   const expandKeys = expandedKeysSet.value
@@ -202,7 +213,7 @@ function toggleExpand(node: TreeNode) {
 
 /**
  * 处理选中的节点
- * @param node 
+ * @param node
  */
 function handleSelect(node: TreeNode) {
   let keys = Array.from(selectKeysRef.value)
@@ -234,8 +245,15 @@ function handleSelect(node: TreeNode) {
     <!-- 实现虚拟树列表 -->
     <WVirtualList :items="flattenTree" :remain="8" :size="33">
       <template #default="{ node }">
-        <WTreeNode :key="node.key" :node="node" :is-expanded="isExpanded(node)" :loading-keys="loadingKeyRef"
-          :select-keys="selectKeysRef" @select="handleSelect" @toggle="toggleExpand">
+        <WTreeNode
+          :key="node.key"
+          :node="node"
+          :is-expanded="isExpanded(node)"
+          :loading-keys="loadingKeyRef"
+          :select-keys="selectKeysRef"
+          @select="handleSelect"
+          @toggle="toggleExpand"
+        >
         </WTreeNode>
       </template>
     </WVirtualList>

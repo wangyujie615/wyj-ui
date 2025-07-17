@@ -21,6 +21,7 @@ export default defineComponent({
     },
   },
   setup(props, { slots }) {
+    // 创建bem规范
     const bem = createNameSpace('vl')
     // 虚拟列表的外边框
     const wrapperRef = ref<HTMLElement>()
@@ -43,6 +44,7 @@ export default defineComponent({
     })
     // 可见的数据
     // 可以多展示上下的数据 保证用户在快速滚动时，数据不会白屏
+    // 监听了四个元素进行计算
     const visibleData = computed(() => {
       return props.items.slice(state.start - pre.value, state.end + next.value)
     })
@@ -77,6 +79,7 @@ export default defineComponent({
             class={bem.e('scroll-list')}
             style={{ transform: `translate3d(0,${offset.value}px,0)` }}
           >
+            {/* 渲染可见数据 */}
             {visibleData.value.map(node => slots.default!({ node }))}
           </div>
         </div>
