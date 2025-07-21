@@ -102,7 +102,7 @@ const check = ref(true)
   </WIcon>
   <!-- 在使用树组件时 会传递一个树形结构 -->
   <WTree :data="data" label-field="label" key-field="key" children-field="children" :mutiple="true" :select-keys="value"
-    @update:select-keys="handleSelect">
+    @update:select-keys="handleSelect" show-checkbox :default-checked-keys="['40', '41']">
     <template #default="{ node }">
       {{ node.key }}-{{ node.label }}
     </template>

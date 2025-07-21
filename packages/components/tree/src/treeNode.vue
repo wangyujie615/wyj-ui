@@ -2,6 +2,7 @@
 import { createNameSpace } from '@wyj-ui/utils/create';
 import { treeNodeEmits, treeNodeProps, treeInjectKey } from './tree';
 import Switcher from './icon/Switcher';
+import WCheckbox from '@wyj-ui/components/checkbox'
 import WIcon from '@wyj-ui/components/icon';
 import Loading from "./icon/Loading"
 import { computed, inject } from 'vue'
@@ -38,6 +39,10 @@ function handleSelected() {
   emit('select', node)
 }
 
+function handleCheckChange(value: boolean) {
+  emit('check', node, value)
+}
+
 </script>
 <template>
   <div :class="[bem.b(), bem.is('selected', isSelected), bem.is('disabled', node.disabled)]"
@@ -56,6 +61,9 @@ function handleSelected() {
           <Loading v-else size="48" color="#3b82f6" thickness="8"></Loading>
         </WIcon>
       </span>
+      <WCheckbox v-if="showCheckbox" :model-value="checked" :disabled="disabled" :inderminate="indeterminate"
+        @change="handleCheckChange">
+      </WCheckbox>
       <!-- 节点内容：这里使用的是TSX渲染插槽传入的数据 -->
       <span @click="handleSelected" :class="bem.e('label')">
         <WTreeNodeContent :node="node"></WTreeNodeContent>

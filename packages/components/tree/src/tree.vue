@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, provide, useSlots } from 'vue'
+import { computed, ref, watch, provide, useSlots, onMounted } from 'vue'
 import {
   TreeNode,
   TreeOption,
@@ -41,6 +41,12 @@ const loadingKeyRef = ref(new Set<key>())
 // 记录组件选中的节点
 const selectKeysRef = ref<key[]>([])
 
+// 记录勾选的框
+const checkedKeysRefs = ref(new Set(props.defaultCheckedKeys))
+
+// 记录半选集合
+const indeterminateRef = ref<Set<key>>(new Set())
+
 // 外层传入的插槽 接受Tree传入的插槽
 provide(treeInjectKey, {
   slots: useSlots(),
@@ -67,6 +73,16 @@ watch(
   },
   { immediate: true }
 )
+
+
+//
+
+onMounted(() => {
+  checkedKeysRefs.value.forEach(key => {
+    toggleCheck(findNode[key as any], true)
+  })
+})
+
 // 根据展开的节点对树进行拍平
 // 例子：[{id:1,label:'level1',children:[{id:11,label:'leve;2'}]},{id:2,label:'level1',children:[]}]
 // 展开节点一：相当于转化为[1,11,2]=>为了懒加载的实现
@@ -116,6 +132,7 @@ function formatData(data: TreeOption[], parent: TreeNode | null = null): any {
         disabled: node.disabled ?? false, // 禁用
         level: parent ? parent.level + 1 : 0, // 根据父亲节点进行计算
         isLeaf: node.isLeaf ?? children.length === 0, // 判断节点是否自带叶子属性
+        parentKey: parent?.key
       }
       if (children.length) {
         // 有孩子才去递归
@@ -239,21 +256,97 @@ function handleSelect(node: TreeNode) {
   }
   emit('update:selectKeys', keys)
 }
+
+/**
+ * 是否被勾选
+ */
+function isChecked(node: TreeNode) {
+  return checkedKeysRefs.value.has(node.key)
+}
+/**
+ * 是否被禁用
+ */
+function isDisabled(node: TreeNode) {
+  return !!node.disabled
+}
+
+/**
+ * 是否是半选 级联选择
+ */
+function isIndeterminate(node: TreeNode) {
+  return indeterminateRef.value.has(node.key)
+}
+
+/**
+ * 自上而下的选中
+ */
+
+function toggle(node: TreeNode, checked: boolean) {
+  const chekedKeys = checkedKeysRefs.value
+  if (checked) {
+    // 选中时去除半选
+    indeterminateRef.value.delete(node.key)
+  }
+  // 维护当前的key列表
+  chekedKeys[checked ? 'add' : 'delete'](node.key)
+
+  let children = node.children
+
+  if (children) {
+    node.children.forEach(child => {
+      if (!child.disabled) {
+        toggleCheck(child, checked)
+      }
+    })
+  }
+}
+function findNode(key: key) {
+  return flattenTree.value.find(node => node.key === key)
+}
+// 自下而上的查找
+function updateCheckedKeys(node: TreeNode) {
+  if (node.parentKey) {
+    let parentNode = findNode(node.parentKey)
+
+    if (parentNode) {
+      let allChecked = true; //默认儿子全选
+      let hasChecked = false; //儿子是否没有被选中
+      let nodes = parentNode.children;
+      for (let ndoe of nodes) {
+        if (checkedKeysRefs.value.has(node.key)) {
+          hasChecked = true
+        } else if (indeterminateRef.value.has(node.key)) {
+          allChecked = false
+          hasChecked = true
+        } else {
+          allChecked = false
+        }
+      }
+      if (allChecked) {
+        checkedKeysRefs.value.add(parentNode.key)
+        indeterminateRef.value.delete(parentNode.key)
+      } else if (hasChecked) {
+        checkedKeysRefs.value.delete(parentNode.key)
+        indeterminateRef.value.add(parentNode.key)
+      }
+      updateCheckedKeys(parentNode)
+    }
+  }
+}
+function toggleCheck(node: TreeNode, checked: boolean) {
+  toggle(node, checked)
+  updateCheckedKeys(node)
+}
 </script>
 <template>
   <div :class="bem.b()">
     <!-- 实现虚拟树列表 -->
     <WVirtualList :items="flattenTree" :remain="8" :size="33">
       <template #default="{ node }">
-        <WTreeNode
-          :key="node.key"
-          :node="node"
-          :is-expanded="isExpanded(node)"
-          :loading-keys="loadingKeyRef"
-          :select-keys="selectKeysRef"
-          @select="handleSelect"
-          @toggle="toggleExpand"
-        >
+        <WTreeNode :key="node.key" :node="node" :is-expanded="isExpanded(node)" :loading-keys="loadingKeyRef"
+          :select-keys="selectKeysRef" :show-checkbox="showCheckbox" :disabled="isDisabled(node)"
+          :checked="isChecked(node)" :indeterminate="isIndeterminate(node)" @select="handleSelect"
+          @toggle="toggleExpand" @check="toggleCheck">
         </WTreeNode>
       </template>
     </WVirtualList>

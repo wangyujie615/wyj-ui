@@ -14,7 +14,9 @@ export interface TreeOption {
 export interface TreeNode extends Required<TreeOption> {
   level: number, // 节点的层级
   rawNode: TreeOption, // 原始节点的数据
-  children: TreeNode[] // 同名覆盖原始属性
+  children: TreeNode[], // 同名覆盖原始属性
+  isLeaf: boolean,
+  parentKey: key | undefined
 }
 
 
@@ -67,6 +69,16 @@ export const treeProps = {
   mutiple: {
     type: Boolean,
     default: false
+  },
+  // 默认选中的节点
+  defaultCheckedKeys: {
+    type: Array as PropType<key[]>,
+    default: () => []
+  },
+  // 是否显示checkbox
+  showCheckbox: {
+    type: Boolean,
+    default: false
   }
 } as const // 组件的props理论上是只读的
 // 控制属性可选
@@ -97,13 +109,25 @@ export const treeNodeProps = {
   selectKeys: {
     type: Array as PropType<key[]>,
     default: () => []
-  }
+  },
+  // 是否显示CheckBox
+  showCheckbox: {
+    type: Boolean,
+    default: false
+  },
+  // 是否选中
+  checked: Boolean,
+  // 是否禁用
+  disabled: Boolean,
+  // 是否是半选
+  indeterminate: Boolean
 } as const
 
 export type TreeNodeProps = Partial<ExtractPropTypes<typeof treeNodeProps>>
 export const treeNodeEmits = {
   toggle: (node: TreeNode) => node,
   select: (node: TreeNode) => node,
+  check: (node: TreeNode, value: boolean) => typeof value === 'boolean'
 }
 
 // 节点内容Props
