@@ -74,9 +74,7 @@ watch(
   { immediate: true }
 )
 
-
-//
-
+// 挂载方法
 onMounted(() => {
   checkedKeysRefs.value.forEach(key => {
     toggleCheck(findNode[key as any], true)
@@ -312,7 +310,7 @@ function updateCheckedKeys(node: TreeNode) {
       let allChecked = true; //默认儿子全选
       let hasChecked = false; //儿子是否没有被选中
       let nodes = parentNode.children;
-      for (let ndoe of nodes) {
+      for (let node of nodes) {
         if (checkedKeysRefs.value.has(node.key)) {
           hasChecked = true
         } else if (indeterminateRef.value.has(node.key)) {

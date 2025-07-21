@@ -53,7 +53,7 @@ function handleChange(e: Event) {
     <!-- 勾选框:显示勾选 -->
     <span :class="bem.e('input')">
       <input type="checkbox" v-model="model" ref="inputRef" :disabled="disabled" :value="label"
-        @chaneg="handleChange" />
+        @change="handleChange" />
     </span>
     <!-- 选中的内容 -->
     <span v-if="$slots.default || label" :class="bem.e('label')">
