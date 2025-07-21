@@ -56,7 +56,7 @@ function handleSelected() {
           <Loading v-else size="48" color="#3b82f6" thickness="8"></Loading>
         </WIcon>
       </span>
-      <!-- 节点内容 -->
+      <!-- 节点内容：这里使用的是TSX渲染插槽传入的数据 -->
       <span @click="handleSelected" :class="bem.e('label')">
         <WTreeNodeContent :node="node"></WTreeNodeContent>
       </span>

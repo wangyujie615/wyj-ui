@@ -6,7 +6,7 @@ export const checkboxProps = {
     type: [Boolean, String, Number] as PropType<boolean | string | number>,
     default: false
   },
-  // 默认选中
+  // 默认半选状态
   indeterminate: Boolean,
   // 是否禁用
   disabled: Boolean,

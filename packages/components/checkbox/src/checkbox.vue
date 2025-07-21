@@ -19,6 +19,7 @@ const model = computed<any>({
     return props.modelValue
   },
   set(value: any) {
+    // 设置时 自动触发
     emit('update:modelValue', value)
   }
 })
@@ -54,6 +55,7 @@ function handleChange(e: Event) {
       <input type="checkbox" v-model="model" ref="inputRef" :disabled="disabled" :value="label"
         @chaneg="handleChange" />
     </span>
+    <!-- 选中的内容 -->
     <span v-if="$slots.default || label" :class="bem.e('label')">
       <slot></slot>
       <!-- 插槽不存在显示标签 -->
