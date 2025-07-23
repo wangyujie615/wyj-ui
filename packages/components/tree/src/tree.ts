@@ -5,7 +5,7 @@ export interface TreeOption {
   label?: key,
   key?: key,
   children?: TreeOption[], // 子节点元素
-  isLeaf: boolean,
+  isLeaf?: boolean, // 修改为可选，因为可以通过 children 推断
   disabled?: boolean, // 禁用
   [key: string]: unknown // 任意接口
 }
@@ -85,7 +85,12 @@ export const treeProps = {
 export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
 // 树内部发射的事件用来同步响应数据
 export const treeEmits = {
-  'update:selectKeys': (keys: key[]) => keys
+  'update:selectKeys': (keys: key[]) => keys, // 双向绑定选中的节点
+  'update:checkedKeys': (keys: key[]) => keys, // 
+  'update:expandedKeys': (keys: key[]) => keys, // 展开的节点
+  'node-click': (node: TreeNode) => node, // 点击的节点
+  'node-expand': (node: TreeNode) => node, // 展开的节点
+  'node-collapse': (node: TreeNode) => node // 节点的折叠
 }
 
 // TreeNode的props

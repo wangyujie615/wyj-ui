@@ -77,7 +77,10 @@ watch(
 // 挂载方法
 onMounted(() => {
   checkedKeysRefs.value.forEach(key => {
-    toggleCheck(findNode[key as any], true)
+    const node = findNode(key as any)
+    if (node) {
+      toggleCheck(node, true)
+    }
   })
 })
 
@@ -144,7 +147,7 @@ function formatData(data: TreeOption[], parent: TreeNode | null = null): any {
 }
 
 /**
- * 封装调用TreeOption属性的方法
+ * 封装调用TreeOption属性的方法---字段访问器 
  * @param key 获取的key
  * @param label 获取的label
  * @param children 获取的children
@@ -177,6 +180,8 @@ function isExpanded(node: TreeNode): boolean {
  */
 function collapse(node: TreeNode) {
   expandedKeysSet.value.delete(node.key)
+  emit('node-collapse', node)
+  emit('update:expandedKeys', Array.from(expandedKeysSet.value))
 }
 
 /**
@@ -185,6 +190,8 @@ function collapse(node: TreeNode) {
  */
 function expand(node: TreeNode) {
   expandedKeysSet.value.add(node.key)
+  emit('node-expand', node)
+  emit('update:expandedKeys', Array.from(expandedKeysSet.value))
   // 加载子节点
   triggerLoading(node)
 }
@@ -206,6 +213,11 @@ function triggerLoading(node: TreeNode) {
           node.rawNode.children = children
           node.children = formatData(children, node)
           loadingKeys.delete(node.key)
+        }).catch(error => {
+          // 处理异步加载失败的情况
+          console.error('Failed to load tree node children:', error)
+          loadingKeys.delete(node.key)
+          // 可以在这里添加错误状态的处理，比如显示错误提示
         })
       }
     }
@@ -234,7 +246,11 @@ function handleSelect(node: TreeNode) {
   let keys = Array.from(selectKeysRef.value)
   // 无法选择
   if (!props.selectAble) return
+
+  emit('node-click', node)
+
   if (props.mutiple) {
+    // 多选
     let index = keys.findIndex(key => key === node.key)
     if (index > -1) {
       // 当前节点被选中 则取消选中
@@ -244,6 +260,7 @@ function handleSelect(node: TreeNode) {
       keys.push(node.key)
     }
   } else {
+    // 单选
     if (keys.includes(node.key)) {
       // 之前选中 变成未被选中
       keys = []
@@ -278,62 +295,83 @@ function isIndeterminate(node: TreeNode) {
 /**
  * 自上而下的选中
  */
-
 function toggle(node: TreeNode, checked: boolean) {
-  const chekedKeys = checkedKeysRefs.value
+  const checkedKeys = checkedKeysRefs.value
   if (checked) {
     // 选中时去除半选
     indeterminateRef.value.delete(node.key)
   }
   // 维护当前的key列表
-  chekedKeys[checked ? 'add' : 'delete'](node.key)
+  checkedKeys[checked ? 'add' : 'delete'](node.key)
 
   let children = node.children
 
-  if (children) {
-    node.children.forEach(child => {
+  if (children && children.length > 0) {
+    children.forEach(child => {
       if (!child.disabled) {
-        toggleCheck(child, checked)
+        // 直接调用 toggle 避免重复的父级更新
+        toggle(child, checked)
       }
     })
   }
 }
+
+// 根据key查找节点
 function findNode(key: key) {
   return flattenTree.value.find(node => node.key === key)
 }
+
 // 自下而上的查找
 function updateCheckedKeys(node: TreeNode) {
   if (node.parentKey) {
     let parentNode = findNode(node.parentKey)
 
     if (parentNode) {
+      // 找到父级节点
       let allChecked = true; //默认儿子全选
-      let hasChecked = false; //儿子是否没有被选中
+      let hasChecked = false; //儿子是否有被选中的
       let nodes = parentNode.children;
-      for (let node of nodes) {
-        if (checkedKeysRefs.value.has(node.key)) {
+
+      for (let childNode of nodes) {
+        if (checkedKeysRefs.value.has(childNode.key)) {
           hasChecked = true
-        } else if (indeterminateRef.value.has(node.key)) {
+        } else if (indeterminateRef.value.has(childNode.key)) {
           allChecked = false
           hasChecked = true
         } else {
           allChecked = false
         }
       }
+
+      const wasChecked = checkedKeysRefs.value.has(parentNode.key)
+      const wasIndeterminate = indeterminateRef.value.has(parentNode.key)
+
       if (allChecked) {
         checkedKeysRefs.value.add(parentNode.key)
         indeterminateRef.value.delete(parentNode.key)
       } else if (hasChecked) {
         checkedKeysRefs.value.delete(parentNode.key)
         indeterminateRef.value.add(parentNode.key)
+      } else {
+        checkedKeysRefs.value.delete(parentNode.key)
+        indeterminateRef.value.delete(parentNode.key)
       }
-      updateCheckedKeys(parentNode)
+
+      // 只有当父节点状态发生变化时才继续向上递归
+      const isChecked = checkedKeysRefs.value.has(parentNode.key)
+      const isIndeterminate = indeterminateRef.value.has(parentNode.key)
+
+      if (wasChecked !== isChecked || wasIndeterminate !== isIndeterminate) {
+        updateCheckedKeys(parentNode)
+      }
     }
   }
 }
 function toggleCheck(node: TreeNode, checked: boolean) {
   toggle(node, checked)
   updateCheckedKeys(node)
+  // 发射勾选状态变化事件
+  emit('update:checkedKeys', Array.from(checkedKeysRefs.value))
 }
 </script>
 <template>

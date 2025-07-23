@@ -13,7 +13,7 @@ defineOptions({
 const props = defineProps(checkboxProps)
 // 组件的事件emits
 const emit = defineEmits(checkboxEmits)
-// 计算属性
+// 计算属性 --- 类似实现双向数据绑定
 const model = computed<any>({
   get() {
     return props.modelValue

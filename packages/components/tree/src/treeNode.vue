@@ -16,8 +16,8 @@ const { node, isExpanded, loadingKeys, selectKeys } = defineProps(treeNodeProps)
 // emits
 const emit = defineEmits(treeNodeEmits)
 
-// 注入插槽
-const treeContext = inject(treeInjectKey)
+// 注入插槽 (如果后续需要使用插槽功能)
+// const treeContext = inject(treeInjectKey)
 
 // 计算属性 判断节点的加载状态
 const isLoading = computed(() => {
@@ -39,8 +39,10 @@ function handleSelected() {
   emit('select', node)
 }
 
-function handleCheckChange(value: boolean) {
-  emit('check', node, value)
+function handleCheckChange(value: boolean | string | number) {
+  // 确保传递给父组件的是布尔值
+  const booleanValue = typeof value === 'boolean' ? value : !!value
+  emit('check', node, booleanValue)
 }
 
 </script>
@@ -61,7 +63,7 @@ function handleCheckChange(value: boolean) {
           <Loading v-else size="48" color="#3b82f6" thickness="8"></Loading>
         </WIcon>
       </span>
-      <WCheckbox v-if="showCheckbox" :model-value="checked" :disabled="disabled" :inderminate="indeterminate"
+      <WCheckbox v-if="showCheckbox" :model-value="checked" :disabled="disabled" :indeterminate="indeterminate"
         @change="handleCheckChange">
       </WCheckbox>
       <!-- 节点内容：这里使用的是TSX渲染插槽传入的数据 -->
