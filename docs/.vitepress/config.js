@@ -41,6 +41,10 @@ export default {
                 {
                   text: 'Tree组件',
                   link: '/components/Tree'
+                },
+                {
+                  text:'Checkbox组件',
+                  link:'/components/Checkbox'
                 }
               ]
             }
