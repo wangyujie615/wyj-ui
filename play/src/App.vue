@@ -112,6 +112,7 @@ const check = ref(true)
   <WCheckbox v-model="check" label="节点">
     节点
   </WCheckbox>
+  <WButton type="success" size="small" @click="console.log('点击了按钮')">按钮</WButton>
 </template>
 
 <style scoped></style>

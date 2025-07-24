@@ -2,11 +2,13 @@ import { ExtractPropTypes, PropType } from "vue"
 // 组件的大小
 export type ButtonSize = 'large'| 'medium' | 'small' 
 // 组件的类型
-export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info'
+export type ButtonType = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'info' | 'link' | 'text'
 // 组件的原始类型
 export type NativeType = 'button' | 'submit' | 'reset'
 // icon的placement
 export type IconPlacement = 'left' | 'right'
+// 链接打开方式
+export type LinkTarget = '_blank' | '_self' | '_parent' | '_top'
 
 export const buttonProps = {
   // @type:按钮大小
@@ -18,7 +20,7 @@ export const buttonProps = {
   type: {
     type: String as PropType<ButtonType>,
     //配置校验器
-    validator:(val:string)=>['default', 'primary', 'success', 'warning', 'danger', 'info'].includes(val),
+    validator:(val:string)=>['default', 'primary', 'success', 'warning', 'danger', 'info', 'link', 'text'].includes(val),
     default: 'default'
   },
   // @type:是否圆角按钮
@@ -45,6 +47,16 @@ export const buttonProps = {
   iconPlacement:{
     type: String as PropType<IconPlacement>,
     default: 'left'
+  },
+  // @type: 链接地址
+  href: {
+    type: String,
+    default: ''
+  },
+  // @type: 链接打开方式
+  target: {
+    type: String as PropType<LinkTarget>,
+    default: '_self'
   }
 } as const
 export type ButtonProps = ExtractPropTypes<typeof buttonProps>

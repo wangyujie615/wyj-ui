@@ -10,18 +10,60 @@
   border: #fafafa;
   border-radius: 5px;
   user-select: none;
-  min-height: 40px;
+  min-height: 32px;
   line-height: 1;
   vertical-align: middle;
   padding: 0 20px;
+  transition: all 0.2s ease-in-out;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  // 链接按钮样式
+  @include m(link) {
+    border: none;
+    background: transparent;
+    color: $color-primary;
+    padding: 0;
+    height: auto;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: none;
+    }
+    
+    @include when(disabled) {
+      &,&:hover,&:focus {
+        color: $color-disabled;
+        text-decoration: none;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  // 文字按钮样式
+  @include m(text) {
+    border: none;
+    background: transparent;
+    padding: 0 10px;
+    height: auto;
+    
+    @include when(disabled) {
+      &,&:hover,&:focus {
+        color: $color-disabled;
+        cursor: not-allowed;
+      }
+    }
+  }
   @include m(medium){
     padding: 0 20px;
   }
   @include m(small){
-    padding: 0 18px;
+    padding: 0 16px;
   }
   @include m(large){
-    padding: 0 25px;
+    padding: 0 24px;
   }
   @include when(disabled){
     &,&:hover,&:focus{

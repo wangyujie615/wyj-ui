@@ -48,4 +48,8 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# 规则相关
+.trae/
+.vercel/
+
 
