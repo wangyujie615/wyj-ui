@@ -33,6 +33,14 @@ export default {
                 {
                   text: 'Icon组件',
                   link: '/components/Icon'
+                },
+                {
+                  text: 'Button组件',
+                  link: '/components/Button'
+                },
+                {
+                  text: 'Tree组件',
+                  link: '/components/Tree'
                 }
               ]
             }
