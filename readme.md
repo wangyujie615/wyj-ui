@@ -233,6 +233,7 @@ vitepress 的相关使用参考：https://vitepress.dev/zh/
 - [ ] tree
 - [ ] virtual-list(定长)
 - [ ] checkbox
+- [ ] button
 
 ## Icon 组件
 
@@ -272,4 +273,5 @@ Tree 组件->TreeNode 组件(渲染树的节点)->TreeContent 组件(渲染插�
 4. 计算可视区域缓冲数据
 
 ## Checkbox 组件
+
 如何利用计算属性实现双向绑定(关键)
