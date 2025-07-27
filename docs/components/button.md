@@ -2,7 +2,7 @@
 
 按钮组件用于触发操作或导航，支持多种类型、尺寸和状态。
 
-:::preview button || 按钮
+:::preview
 
 demo-preview=../examples/WButton/index.vue
 
