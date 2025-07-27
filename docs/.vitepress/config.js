@@ -1,4 +1,4 @@
-import { server } from "typescript";
+import { mdPlugin } from "./config/plugins";
 
 export default {
   // 站点级选项
@@ -36,7 +36,7 @@ export default {
                 },
                 {
                   text: 'Button组件',
-                  link: '/components/Button'
+                  link: '/components/WButton/Button'
                 },
                 {
                   text: 'Tree组件',
@@ -72,5 +72,9 @@ export default {
     server:{
       port:3000
     }
+  },
+  // 配置markdown格式
+  markdown:{
+    config: (md)=>mdPlugin(md)
   }
 }

@@ -7,10 +7,19 @@
     "dev": "vitepress dev ."
   },
   "keywords": [],
+  "type": "module",
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.10.0",
   "devDependencies": {
+    "@vitejs/plugin-vue-jsx": "^5.0.1",
+    "vite-plugin-vue-setup-extend": "^0.4.0",
     "vitepress": "^1.6.3"
+  },
+  "dependencies": {
+    "@wyj-ui/app": "workspace:*",
+    "@wyj-ui/components": "workspace:*",
+    "@wyj-ui/utils": "workspace:*",
+    "@wyj-ui/theme-chalk": "workspace:*"
   }
 }
