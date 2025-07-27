@@ -1,6 +1,7 @@
-import { server } from "typescript";
+import { defineConfig } from 'vitepress'
+import {containerPreview,componentPreview} from '@vitepress-demo-preview/plugin'
 
-export default {
+export default defineConfig({
   // 站点级选项
   title: 'wyj-ui',
   description: 'Just playing around.',
@@ -8,28 +9,28 @@ export default {
   themeConfig: {
     // 主题级选项
     logo: './logo.png',
-    nav:[
+    nav: [
       { text: '指南', link: '/guide' },
       { text: '组件', link: '/components' }
     ],
-    sidebar:{
-      '/guide/':[
+    sidebar: {
+      '/guide/': [
         {
           text: '指南',
           items: [
             { text: 'Introduction', link: '/guide/' },
-            { text: 'Getting Started', link: '/guide/quickStart'}
+            { text: 'Getting Started', link: '/guide/quickStart' }
           ]
         }
       ],
 
-      '/components/':[
+      '/components/': [
         {
           text: '组件',
           items: [
-            { 
-              text: 'Basic基础组件', 
-              items:[
+            {
+              text: 'Basic基础组件',
+              items: [
                 {
                   text: 'Icon组件',
                   link: '/components/Icon'
@@ -43,8 +44,8 @@ export default {
                   link: '/components/Tree'
                 },
                 {
-                  text:'Checkbox组件',
-                  link:'/components/Checkbox'
+                  text: 'Checkbox组件',
+                  link: '/components/Checkbox'
                 }
               ]
             }
@@ -68,9 +69,15 @@ export default {
       copyright: 'Copyright © 2019-2025 Evan You'
     }
   },
-  vite:{
-    server:{
-      port:3000
+  vite: {
+    server: {
+      port: 3000
+    }
+  },
+  markdown: {
+    config(md) {
+      md.use(containerPreview)
+      md.use(componentPreview)
     }
   }
-}
+})

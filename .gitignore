@@ -51,5 +51,6 @@ pnpm-debug.log*
 # 规则相关
 .trae/
 .vercel/
+.kiro/
 
 

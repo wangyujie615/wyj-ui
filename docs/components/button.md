@@ -2,6 +2,12 @@
 
 按钮组件用于触发操作或导航，支持多种类型、尺寸和状态。
 
+:::preview button || 按钮
+
+demo-preview=../examples/WButton/index.vue
+
+:::
+
 ## 基本用法
 
 ```vue
@@ -81,29 +87,31 @@
 ```vue
 <template>
   <w-button type="link" href="https://example.com">内部链接</w-button>
-  <w-button type="link" href="https://example.com" target="_blank">新窗口打开</w-button>
+  <w-button type="link" href="https://example.com" target="_blank"
+    >新窗口打开</w-button
+  >
 </template>
 ```
 
 ## Props 属性
 
-| 属性名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| type | ButtonType | 'default' | 按钮类型，可选值：'default', 'primary', 'success', 'warning', 'danger', 'info', 'link', 'text' |
-| size | ButtonSize | 'medium' | 按钮尺寸，可选值：'large', 'medium', 'small' |
-| round | boolean | false | 是否圆角按钮 |
-| disabled | boolean | false | 是否禁用 |
-| loading | boolean | false | 是否加载中 |
-| nativeType | NativeType | 'button' | 原生按钮类型，可选值：'button', 'submit', 'reset' |
-| iconPlacement | IconPlacement | 'left' | 图标位置，可选值：'left', 'right' |
-| href | string | '' | 链接地址，仅当 type='link' 时有效 |
-| target | LinkTarget | '_self' | 链接打开方式，可选值：'_blank', '_self', '_parent', '_top'，仅当 type='link' 时有效 |
+| 属性名        | 类型          | 默认值    | 说明                                                                                           |
+| ------------- | ------------- | --------- | ---------------------------------------------------------------------------------------------- |
+| type          | ButtonType    | 'default' | 按钮类型，可选值：'default', 'primary', 'success', 'warning', 'danger', 'info', 'link', 'text' |
+| size          | ButtonSize    | 'medium'  | 按钮尺寸，可选值：'large', 'medium', 'small'                                                   |
+| round         | boolean       | false     | 是否圆角按钮                                                                                   |
+| disabled      | boolean       | false     | 是否禁用                                                                                       |
+| loading       | boolean       | false     | 是否加载中                                                                                     |
+| nativeType    | NativeType    | 'button'  | 原生按钮类型，可选值：'button', 'submit', 'reset'                                              |
+| iconPlacement | IconPlacement | 'left'    | 图标位置，可选值：'left', 'right'                                                              |
+| href          | string        | ''        | 链接地址，仅当 type='link' 时有效                                                              |
+| target        | LinkTarget    | '\_self'  | 链接打开方式，可选值：'\_blank', '\_self', '\_parent', '\_top'，仅当 type='link' 时有效        |
 
 ## Emits 事件
 
-| 事件名 | 回调参数 | 说明 |
-|--------|----------|------|
-| click | (event: MouseEvent) | 点击按钮时触发 |
+| 事件名    | 回调参数            | 说明               |
+| --------- | ------------------- | ------------------ |
+| click     | (event: MouseEvent) | 点击按钮时触发     |
 | mousedown | (event: MouseEvent) | 鼠标按下按钮时触发 |
 
 ## 事件用法示例
@@ -116,11 +124,11 @@
 </template>
 
 <script setup>
-const handleClick = (event) => {
+const handleClick = event => {
   console.log('按钮被点击', event)
 }
 
-const handleMouseDown = (event) => {
+const handleMouseDown = event => {
   console.log('鼠标按下', event)
 }
 </script>
