@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import {containerPreview,componentPreview} from '@vitepress-demo-preview/plugin'
-
+import jsx from '@vitejs/plugin-vue-jsx'
+import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   // 站点级选项
   title: 'wyj-ui',
@@ -72,7 +73,8 @@ export default defineConfig({
   vite: {
     server: {
       port: 3000
-    }
+    },
+    plugins:[jsx()]
   },
   markdown: {
     config(md) {

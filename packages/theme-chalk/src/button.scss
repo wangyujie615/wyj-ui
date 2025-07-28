@@ -7,7 +7,7 @@
   display: inline-flex;
   cursor: pointer;
   outline: none;
-  border: #fafafa;
+  border: 1px solid #13acbd;
   border-radius: 5px;
   user-select: none;
   min-height: 32px;
@@ -56,14 +56,15 @@
       }
     }
   }
+  // 尺寸
   @include m(medium){
-    padding: 0 20px;
+    padding: 10px 24px;
   }
   @include m(small){
-    padding: 0 16px;
+    padding: 0px 12px;
   }
   @include m(large){
-    padding: 0 24px;
+    padding: 20px 36px;
   }
   @include when(disabled){
     &,&:hover,&:focus{
@@ -79,5 +80,18 @@
   }
   @include m(success){
     @include button-variant($color-white,$color-success,$color-success);
+  }
+  @include m(warning){
+    @include button-variant($color-white,$color-warning,$color-warning);
+  }
+  @include m(danger){
+    @include button-variant($color-white,$color-danger,$color-danger);
+  }
+  @include m(info){
+    @include button-variant($color-white,$color-info,$color-info);
+  } 
+  @include m(default){
+    @include button-variant($color-white,$color-info,$color-info);
+    color: $color-black;
   }
 }

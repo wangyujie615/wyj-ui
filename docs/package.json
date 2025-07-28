@@ -18,6 +18,8 @@
     "vitepress-plugin-legend": "^1.0.4"
   },
   "dependencies": {
-    "@wyj-ui/components": "workspace:*"
+    "@wyj-ui/components": "workspace:*",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5"
   }
 }

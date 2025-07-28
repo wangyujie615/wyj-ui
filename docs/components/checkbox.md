@@ -1,6 +1,11 @@
 # Checkbox 复选框组件
 
 复选框组件，支持双向数据绑定、半选状态、禁用状态等功能。
+:::preview
+
+demo-preview=../examples/WCheckbox/index.vue
+
+:::
 
 ## 基本用法
 
@@ -62,23 +67,23 @@ const checked = ref(false)
 
 ## 组件属性 (Props)
 
-| 属性名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| modelValue | `boolean \| string \| number` | `false` | 绑定值，支持双向数据绑定 |
-| indeterminate | `boolean` | `false` | 是否显示半选状态 |
-| disabled | `boolean` | `false` | 是否禁用复选框 |
-| label | `string` | - | 复选框的标签值，当插槽内容为空时显示 |
+| 属性名        | 类型                          | 默认值  | 说明                                 |
+| ------------- | ----------------------------- | ------- | ------------------------------------ |
+| modelValue    | `boolean \| string \| number` | `false` | 绑定值，支持双向数据绑定             |
+| indeterminate | `boolean`                     | `false` | 是否显示半选状态                     |
+| disabled      | `boolean`                     | `false` | 是否禁用复选框                       |
+| label         | `string`                      | -       | 复选框的标签值，当插槽内容为空时显示 |
 
 ## 组件事件 (Emits)
 
-| 事件名 | 回调参数 | 说明 |
-|--------|----------|------|
+| 事件名            | 回调参数                               | 说明                                   |
+| ----------------- | -------------------------------------- | -------------------------------------- |
 | update:modelValue | `(value: boolean \| string \| number)` | 当复选框值改变时触发，用于双向数据绑定 |
-| change | `(value: boolean \| string \| number)` | 当复选框状态改变时触发 |
+| change            | `(value: boolean \| string \| number)` | 当复选框状态改变时触发                 |
 
 ## 事件使用示例
 
-### 监听change事件
+### 监听 change 事件
 
 ```vue
 <template>
@@ -90,20 +95,17 @@ import { ref } from 'vue'
 
 const checked = ref(false)
 
-const handleChange = (value) => {
+const handleChange = value => {
   console.log('复选框状态改变:', value)
 }
 </script>
 ```
 
-### 使用update:modelValue事件
+### 使用 update:modelValue 事件
 
 ```vue
 <template>
-  <WCheckbox 
-    :modelValue="checked" 
-    @update:modelValue="handleUpdate"
-  >
+  <WCheckbox :modelValue="checked" @update:modelValue="handleUpdate">
     复选框
   </WCheckbox>
 </template>
@@ -113,7 +115,7 @@ import { ref } from 'vue'
 
 const checked = ref(false)
 
-const handleUpdate = (value) => {
+const handleUpdate = value => {
   checked.value = value
   console.log('值更新为:', value)
 }
@@ -122,13 +124,13 @@ const handleUpdate = (value) => {
 
 ## 插槽
 
-| 插槽名 | 说明 |
-|--------|------|
+| 插槽名  | 说明                                                 |
+| ------- | ---------------------------------------------------- |
 | default | 复选框的标签内容，当提供此插槽时，会优先显示插槽内容 |
 
 ## 样式类名
 
-组件使用BEM命名规范，主要样式类名如下：
+组件使用 BEM 命名规范，主要样式类名如下：
 
 - `w-checkbox` - 复选框根元素
 - `w-checkbox__input` - 复选框输入区域
@@ -150,13 +152,13 @@ const handleUpdate = (value) => {
     <h3>基础用法</h3>
     <WCheckbox v-model="checked1">选项1</WCheckbox>
     <WCheckbox v-model="checked2" label="选项2">选项2</WCheckbox>
-    
+
     <h3>禁用状态</h3>
     <WCheckbox v-model="checked3" disabled>禁用复选框</WCheckbox>
-    
+
     <h3>半选状态</h3>
     <WCheckbox v-model="checked4" :indeterminate="true">半选状态</WCheckbox>
-    
+
     <h3>事件监听</h3>
     <WCheckbox v-model="checked5" @change="handleChange">带事件监听</WCheckbox>
   </div>
@@ -171,7 +173,7 @@ const checked3 = ref(false)
 const checked4 = ref(false)
 const checked5 = ref(false)
 
-const handleChange = (value) => {
+const handleChange = value => {
   console.log('复选框状态改变:', value)
 }
 </script>

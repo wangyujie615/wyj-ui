@@ -2,6 +2,12 @@
 
 树形组件用于展示层级结构数据，支持展开/折叠、选择、勾选、异步加载等功能。
 
+:::preview
+
+demo-preview=../examples/WTree/index.vue
+
+:::
+
 ## 基本用法
 
 ```vue
@@ -18,20 +24,18 @@ const treeData = [
       {
         label: '二级 1-1',
         key: '1-1',
-        children: [
-          { label: '三级 1-1-1', key: '1-1-1' }
-        ]
-      }
-    ]
+        children: [{ label: '三级 1-1-1', key: '1-1-1' }],
+      },
+    ],
   },
   {
     label: '一级 2',
     key: '2',
     children: [
       { label: '二级 2-1', key: '2-1' },
-      { label: '二级 2-2', key: '2-2' }
-    ]
-  }
+      { label: '二级 2-2', key: '2-2' },
+    ],
+  },
 ]
 </script>
 ```
@@ -42,7 +46,11 @@ const treeData = [
 
 ```vue
 <template>
-  <w-tree :data="treeData" :selectable="true" v-model:selectKeys="selectedKeys" />
+  <w-tree
+    :data="treeData"
+    :selectable="true"
+    v-model:selectKeys="selectedKeys"
+  />
 </template>
 
 <script setup>
@@ -57,7 +65,12 @@ const selectedKeys = ref(['1-1-1'])
 
 ```vue
 <template>
-  <w-tree :data="treeData" :selectable="true" :multiple="true" v-model:selectKeys="selectedKeys" />
+  <w-tree
+    :data="treeData"
+    :selectable="true"
+    :multiple="true"
+    v-model:selectKeys="selectedKeys"
+  />
 </template>
 
 <script setup>
@@ -101,12 +114,12 @@ const checkedKeys = ref(['1-1', '2-1'])
 </template>
 
 <script setup>
-const loadNode = async (node) => {
+const loadNode = async node => {
   // 模拟异步加载
   await new Promise(resolve => setTimeout(resolve, 1000))
   return [
     { label: '动态加载节点 1', key: `${node.key}-1` },
-    { label: '动态加载节点 2', key: `${node.key}-2` }
+    { label: '动态加载节点 2', key: `${node.key}-2` },
   ]
 }
 </script>
@@ -118,8 +131,8 @@ const loadNode = async (node) => {
 
 ```vue
 <template>
-  <w-tree 
-    :data="customData" 
+  <w-tree
+    :data="customData"
     key-field="id"
     label-field="name"
     children-field="subs"
@@ -131,10 +144,8 @@ const customData = [
   {
     name: '自定义名称',
     id: 'custom-1',
-    subs: [
-      { name: '子节点', id: 'custom-1-1' }
-    ]
-  }
+    subs: [{ name: '子节点', id: 'custom-1-1' }],
+  },
 ]
 </script>
 ```
@@ -155,9 +166,9 @@ const treeData = [
     key: '1',
     children: [
       { label: '禁用节点', key: '1-1', disabled: true },
-      { label: '正常节点', key: '1-2' }
-    ]
-  }
+      { label: '正常节点', key: '1-2' },
+    ],
+  },
 ]
 </script>
 ```
@@ -178,43 +189,43 @@ const treeData = [
 
 ## Props 属性
 
-| 属性名 | 类型 | 默认值 | 说明 |
-|--------|------|--------|------|
-| data | TreeOption[] | [] | 树形数据 |
-| label-field | string | 'label' | 节点标签字段名 |
-| key-field | string | 'key' | 节点唯一标识字段名 |
-| children-field | string | 'children' | 子节点字段名 |
-| default-expanded-keys | key[] | [] | 默认展开的节点key数组 |
-| select-keys | key[] | - | 选中的节点key数组（双向绑定） |
-| selectable | boolean | true | 是否支持节点选择 |
-| multiple | boolean | false | 是否支持多选 |
-| default-checked-keys | key[] | [] | 默认勾选的节点key数组 |
-| show-checkbox | boolean | false | 是否显示勾选框 |
-| on-load | Function | - | 异步加载子节点的方法，接收节点参数，返回Promise<TreeOption[]> |
+| 属性名                | 类型         | 默认值     | 说明                                                           |
+| --------------------- | ------------ | ---------- | -------------------------------------------------------------- |
+| data                  | TreeOption[] | []         | 树形数据                                                       |
+| label-field           | string       | 'label'    | 节点标签字段名                                                 |
+| key-field             | string       | 'key'      | 节点唯一标识字段名                                             |
+| children-field        | string       | 'children' | 子节点字段名                                                   |
+| default-expanded-keys | key[]        | []         | 默认展开的节点 key 数组                                        |
+| select-keys           | key[]        | -          | 选中的节点 key 数组（双向绑定）                                |
+| selectable            | boolean      | true       | 是否支持节点选择                                               |
+| multiple              | boolean      | false      | 是否支持多选                                                   |
+| default-checked-keys  | key[]        | []         | 默认勾选的节点 key 数组                                        |
+| show-checkbox         | boolean      | false      | 是否显示勾选框                                                 |
+| on-load               | Function     | -          | 异步加载子节点的方法，接收节点参数，返回 Promise<TreeOption[]> |
 
 ### TreeOption 接口
 
 ```typescript
 interface TreeOption {
-  label?: string | number    // 节点显示文本
-  key?: string | number      // 节点唯一标识
-  children?: TreeOption[]    // 子节点数组
-  isLeaf?: boolean          // 是否为叶子节点
-  disabled?: boolean        // 是否禁用
-  [key: string]: unknown   // 其他自定义属性
+  label?: string | number // 节点显示文本
+  key?: string | number // 节点唯一标识
+  children?: TreeOption[] // 子节点数组
+  isLeaf?: boolean // 是否为叶子节点
+  disabled?: boolean // 是否禁用
+  [key: string]: unknown // 其他自定义属性
 }
 ```
 
 ## Emits 事件
 
-| 事件名 | 回调参数 | 说明 |
-|--------|----------|------|
-| update:selectKeys | (keys: key[]) | 选中的节点key数组变化时触发 |
-| update:checkedKeys | (keys: key[]) | 勾选的节点key数组变化时触发 |
-| update:expandedKeys | (keys: key[]) | 展开的节点key数组变化时触发 |
-| node-click | (node: TreeNode) | 节点被点击时触发 |
-| node-expand | (node: TreeNode) | 节点展开时触发 |
-| node-collapse | (node: TreeNode) | 节点折叠时触发 |
+| 事件名              | 回调参数         | 说明                          |
+| ------------------- | ---------------- | ----------------------------- |
+| update:selectKeys   | (keys: key[])    | 选中的节点 key 数组变化时触发 |
+| update:checkedKeys  | (keys: key[])    | 勾选的节点 key 数组变化时触发 |
+| update:expandedKeys | (keys: key[])    | 展开的节点 key 数组变化时触发 |
+| node-click          | (node: TreeNode) | 节点被点击时触发              |
+| node-expand         | (node: TreeNode) | 节点展开时触发                |
+| node-collapse       | (node: TreeNode) | 节点折叠时触发                |
 
 ## TreeNode 节点对象
 
@@ -222,14 +233,14 @@ interface TreeOption {
 
 ```typescript
 interface TreeNode {
-  key: string | number      // 节点唯一标识
-  label: string             // 节点显示文本
-  children: TreeNode[]      // 子节点数组
-  level: number            // 节点层级（从0开始）
-  isLeaf: boolean          // 是否为叶子节点
-  disabled: boolean        // 是否禁用
+  key: string | number // 节点唯一标识
+  label: string // 节点显示文本
+  children: TreeNode[] // 子节点数组
+  level: number // 节点层级（从0开始）
+  isLeaf: boolean // 是否为叶子节点
+  disabled: boolean // 是否禁用
   parentKey: string | number | undefined // 父节点key
-  rawNode: TreeOption      // 原始数据对象
+  rawNode: TreeOption // 原始数据对象
 }
 ```
 
@@ -237,8 +248,8 @@ interface TreeNode {
 
 ```vue
 <template>
-  <w-tree 
-    :data="treeData" 
+  <w-tree
+    :data="treeData"
     show-checkbox
     selectable
     multiple
@@ -256,15 +267,15 @@ import { ref } from 'vue'
 const selectedKeys = ref([])
 const checkedKeys = ref([])
 
-const handleNodeClick = (node) => {
+const handleNodeClick = node => {
   console.log('点击节点:', node.label, node.key)
 }
 
-const handleNodeExpand = (node) => {
+const handleNodeExpand = node => {
   console.log('展开节点:', node.label)
 }
 
-const handleNodeCollapse = (node) => {
+const handleNodeCollapse = node => {
   console.log('折叠节点:', node.label)
 }
 </script>
@@ -284,9 +295,9 @@ const handleNodeCollapse = (node) => {
 
 ## 注意事项
 
-1. 节点key必须唯一，否则会引发渲染问题
+1. 节点 key 必须唯一，否则会引发渲染问题
 2. 禁用节点无法被选择或勾选
-3. 异步加载的节点需要正确设置isLeaf属性
+3. 异步加载的节点需要正确设置 isLeaf 属性
 4. 勾选功能支持父子节点的级联选择
 5. 虚拟滚动技术确保大数据量下的性能表现
 6. 自定义字段名时确保数据结构一致性
